@@ -1,6 +1,11 @@
 # HSR-Stud LaTeX Style & Macros
 
 ## TODO
+- [ ] Options
+  - [X] Vectors with arrows
+  - [X] Dervivatives with Del notation
+  - [ ] Document Formatting related (could be moved into a document class)
+    - [ ] Use 'hsr standard' header
 - [X] Notation Macros
   - [X] Vectors, Matrices and Tensors
   - [X] Equalities
@@ -9,13 +14,14 @@
 - [ ] Document classes
   - [ ] Summary
   - [ ] Long summary
-  - [ ] Short document
 - [ ] Documentation on how to contribute
+  - [ ] Add a new macro
+  - [ ] Add a new env
 - [ ] More options (suggestions?)
 
 ## Compile
 It is as simple as it gets. 
-This will generate a `hsrstud.sty` file that can be placed in any folder other LaTeX project,
+This will generate a `hsrstud.sty` file that can be placed in the folder of any other LaTeX project,
 which can access the library with `\usepackage{hsrstud}`
 ```
 $ xelatex hsrstud.dtx
