@@ -1,0 +1,236 @@
+% \iffalse meta-comment
+%<*internal>
+\def\nameofplainTeX{plain}
+\ifx\fmtname\nameofplainTeX\else
+  \expandafter\begingroup
+\fi
+%</internal>
+%<*install>
+\input docstrip.tex
+\keepsilent
+\askforoverwritefalse
+\usedir{tex/latex/hsrstud}
+\generate{
+  \file{\jobname.sty}{\from{\jobname.dtx}{package}}
+}
+%</install>
+%<install>\endbatchfile
+%<*internal>
+\usedir{source/latex/hsrstud}
+\generate{
+  \file{\jobname.ins}{\from{\jobname.dtx}{install}}
+}
+\nopreamble\nopostamble
+\ifx\fmtname\nameofplainTeX
+  \expandafter\endbatchfile
+\else
+  \expandafter\endgroup
+\fi
+%</internal>
+
+
+%<*package>
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{hsrstud}[2020/04/16 v0.1 HSR-Stud Macros]
+
+\RequirePackage{amsmath}
+\RequirePackage{amssymb}
+\RequirePackage{bm}
+
+\RequirePackage{xcolor}
+%</package>
+
+
+%<*driver>
+\documentclass[a4paper]{ltxdoc}
+
+\usepackage{\jobname}
+\usepackage[numbered]{hypdoc}
+
+\EnableCrossrefs
+\CodelineIndex
+\RecordChanges
+
+\begin{document}
+  \DocInput{\jobname.dtx}
+\end{document}
+%</driver>
+% \fi
+
+
+% \GetFileInfo{\jobname.sty}
+% \title{^^A
+%   \texttt{hsrstud} --- HSR-Stud Style and Macros\thanks{^^A
+%     This file describes version \fileversion, last revised \filedate.^^A
+%   }^^A
+% }
+% \author{Naoki Pross \texttt{<npross@hsr.ch>}}
+% \date{Released \filedate}
+% \maketitle
+% \changes{v1.0}{2020/02/16}{Initial Draft}
+
+
+% \iffalse
+%    \begin{macrocode}
+%<*package>
+%    \end{macrocode}
+% \fi
+
+
+% \section{Package Options}
+%    \begin{macrocode}
+\newif\if@arrowvec\@arrowvecfalse
+\DeclareOption{arrowvec}{\@arrowvectrue}
+
+\ProcessOptions\relax
+%    \end{macrocode}
+
+
+
+% \section{Mathematics}
+
+% \subsection{Formatting}
+
+% \begin{macro}{\vec}
+% Typeset vectors, if the option 
+%    \begin{macrocode}
+\if@arrowvec
+\else
+\renewcommand{\vec}[1]{\ensuremath{\bm{#1}}}
+\fi
+%    \end{macrocode}
+% \end{macro}
+
+
+% \subsection{Equalities}
+
+% \begin{macro}{\heq}
+% L'H\^opital limit equality symbol.
+%    \begin{macrocode}
+\newcommand{\heq}{\stackrel{\hat{\texttt{H}}}{=}}
+%    \end{macrocode}
+% \end{macro}
+
+% \subsection{Derivatives}
+
+% \begin{macro}{\dd}
+% The differential element. It needs a \marg{var} and has the optional argument \oarg{exponent}.
+%    \begin{macrocode}
+\newcommand{\dd}[2][]{\mathrm{d}^{#1} #2}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\di}
+% This is the same as \cs{dd} but with a small space before it, it is intended to be used in integrals for a nicer typesetting.
+%    \begin{macrocode}
+\newcommand{\di}[2][]{\,\dd[#1]{#2}}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\deriv}
+% The derivative has arguments \marg{function}, \marg{var} and the optional argument \oarg{order}.
+%    \begin{macrocode}
+\newcommand{\deriv}[3][]{\frac{\dd[#1]{#2}}{\dd[]{#3^{#1}}}}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\pderiv}
+% The partial derivative has arguments \marg{function}, \marg{var} and the optional argument \oarg{order}.
+%    \begin{macrocode}
+\newcommand{\pderiv}[3][]{\frac{\partial^{#1} #2}{\partial^{#1} #3}}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\grad}
+% The gradient operator.
+%    \begin{macrocode}
+\newcommand{\grad}{\nabla}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\div}
+% The divergence operator, \cs{div} is renamed to \cs{divsymb}.
+%    \begin{macrocode}
+\let\divsymb=\div 
+\renewcommand{\div}{\nabla\cdot}
+%    \end{macrocode}
+% \end{macro}
+
+
+% \begin{macro}{\curl}
+% The curl operator.
+%    \begin{macrocode}
+\newcommand{\curl}{\nabla\times}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\laplace}
+% The laplace operator.
+%    \begin{macrocode}
+\newcommand{\laplace}{\nabla^2}
+%    \end{macrocode}
+% \end{macro}
+
+% \section{Colors}
+%    \begin{macrocode}
+\definecolor{hsr-blue}{HTML}{0065A3}
+\definecolor{hsr-blue80}{HTML}{3384B5}
+\definecolor{hsr-blue60}{HTML}{66A3C8}
+\definecolor{hsr-blue40}{HTML}{99C1DA}
+\definecolor{hsr-blue20}{HTML}{CCE0ED}
+
+\definecolor{hsr-mauve}{HTML}{6E1C50}
+\definecolor{hsr-mauve80}{HTML}{8B4973}
+\definecolor{hsr-mauve60}{HTML}{A87796}
+\definecolor{hsr-mauve40}{HTML}{C5A4B9}
+\definecolor{hsr-mauve20}{HTML}{E2D2DC}
+
+\definecolor{hsr-lakegreen}{HTML}{548C86}
+\definecolor{hsr-lakegreen80}{HTML}{76A39E}
+\definecolor{hsr-lakegreen60}{HTML}{98BAB6}
+\definecolor{hsr-lakegreen40}{HTML}{BBD1CF}
+\definecolor{hsr-lakegreen20}{HTML}{DDE8E7}
+
+\definecolor{hsr-reed}{HTML}{7B6951}
+\definecolor{hsr-reed80}{HTML}{958774}
+\definecolor{hsr-reed60}{HTML}{B0A597}
+\definecolor{hsr-reed40}{HTML}{CAC3B9}
+\definecolor{hsr-reed20}{HTML}{E5E1DC}
+
+\definecolor{hsr-petrol}{HTML}{00738D}
+\definecolor{hsr-petrol80}{HTML}{338FA4}
+\definecolor{hsr-petrol60}{HTML}{66ABBB}
+\definecolor{hsr-petrol40}{HTML}{99C7D1}
+\definecolor{hsr-petrol20}{HTML}{CCE3E8}
+
+\definecolor{hsr-basswood}{HTML}{BABD5D}
+\definecolor{hsr-basswood80}{HTML}{C8CA7D}
+\definecolor{hsr-basswood60}{HTML}{D6D79E}
+\definecolor{hsr-basswood40}{HTML}{E3E5BE}
+\definecolor{hsr-basswood20}{HTML}{F1F2DF}
+
+\definecolor{hsr-lightgrey}{HTML}{C6C7C8}
+\definecolor{hsr-lightgrey80}{HTML}{D1D2D3}
+\definecolor{hsr-lightgrey60}{HTML}{DDDDDE}
+\definecolor{hsr-lightgrey40}{HTML}{E8E8E9}
+\definecolor{hsr-lightgrey20}{HTML}{F4F4F4}
+
+\definecolor{hsr-black}{HTML}{1A171B}
+\definecolor{hsr-black80}{HTML}{484549}
+\definecolor{hsr-black60}{HTML}{767476}
+\definecolor{hsr-black40}{HTML}{A4A2A4}
+\definecolor{hsr-black20}{HTML}{D1D1D1}
+%    \end{macrocode}
+
+% \StopEventually{^^A
+%   \PrintChanges
+%   \PrintIndex
+% }
+
+
+% \iffalse
+% \begin{macrocode}
+%</package>
+% \end{macrocode}
+% \fi
+%\Finale
