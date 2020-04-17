@@ -46,10 +46,26 @@
 
 \usepackage{\jobname}
 \usepackage[numbered]{hypdoc}
+
 \usepackage{enumitem}
+\usepackage{framed}
+\usepackage{booktabs}
+\usepackage{tikz}
+
+\usepackage[
+    type={CC},
+    modifier={by-nc-sa},
+    version={4.0},
+]{doclicense}
 
 \EnableCrossrefs
 \RecordChanges
+
+\newenvironment{example}{%
+    \begin{leftbar}%
+}{%
+    \end{leftbar}%
+}
 
 \begin{document}
   \DocInput{\jobname.dtx}
@@ -80,7 +96,7 @@
 %    \section{Package Options} \label{sec:options}
 %    \begin{description}[align=right]
 %       \item[\texttt{arrowvec}] Tells the package to use a vector notation 
-%       with a small arrow over the variables, like handwriting.
+%       with a small arrow over the variables, as it were handwritten.
 %
 %       \item[\texttt{textvecdiff}] Disables the ``Nabla'' or ``Del'' notation 
 %       for vector derivatives. Instead the symbols
@@ -110,14 +126,26 @@
 %    varible will be used, else the vector is bold. Takes one option 
 %    \marg{letter}.
 %
+%    \begin{example}
+%    \[ 
+%    \vec{F} = m\vec{a}
+%    \]
+%    \end{example}
+%
 %    \begin{macrocode}
 \if@arrowvec
 \else
-\renewcommand{\vec}[1]{\bm{#1}}
+\renewcommand{\vec}[1]{\mathbf{\boldsymbol#1}}
 \fi
 %    \end{macrocode}
 %    \end{macro}
-%
+
+%    \begin{macro}{\uvec}
+%    Unit vector notation. Takes \marg{letter}.
+%    \begin{macrocode}
+\newcommand{\uvec}[1]{\mathrm{\hat{#1}}}
+%    \end{macrocode}
+%    \end{macro}
 
 %    \begin{macro}{\mtx}
 %    Matrix notation. Takes \marg{letter}.
@@ -224,6 +252,26 @@
 %    \end{macro}
 
 %    \section{Colors}
+%    \begin{center}
+%    \begin{tikzpicture}
+%       \foreach \color/\y in {%
+%           hsr-blue/0,
+%           hsr-mauve/-1,
+%           hsr-lakegreen/-2,
+%           hsr-reed/-3,
+%           hsr-petrol/-4,
+%           hsr-basswood/-5,
+%           hsr-lightgrey/-6,
+%           hsr-black/-7}{
+%           \foreach \x/\a in {0/,1/80,2/60,3/40,4/20}{
+%               \node[anchor=east] at (-.5,\y) {\texttt{\color}};
+%               \fill[color=\color\a] (\x,\y-.25) rectangle ++(1,.5);
+%               \node[anchor=west] at (\x,\y) {\texttt{\a}};
+%           }
+%       }
+%    \end{tikzpicture}
+%    \end{center}
+%
 %    \begin{macrocode}
 \definecolor{hsr-blue}{HTML}{0065A3}
 \definecolor{hsr-blue80}{HTML}{3384B5}
@@ -273,6 +321,9 @@
 \definecolor{hsr-black40}{HTML}{A4A2A4}
 \definecolor{hsr-black20}{HTML}{D1D1D1}
 %    \end{macrocode}
+
+%    \section{License}
+%    \doclicenseThis
 
 %    \StopEventually{^^A
 %      \PrintChanges

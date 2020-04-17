@@ -44,8 +44,10 @@
 
 \if@arrowvec
 \else
-\renewcommand{\vec}[1]{\bm{#1}}
+\renewcommand{\vec}[1]{\mathbf{\boldsymbol#1}}
 \fi
+
+\newcommand{\uvec}[1]{\mathrm{\hat{#1}}}
 
 \newcommand{\mtx}[1]{\mathrm{#1}}
 
@@ -135,6 +137,7 @@
 \definecolor{hsr-black60}{HTML}{767476}
 \definecolor{hsr-black40}{HTML}{A4A2A4}
 \definecolor{hsr-black20}{HTML}{D1D1D1}
+
 
 
 \endinput
