@@ -36,14 +36,20 @@
 \newif\if@arrowvec\@arrowvecfalse
 \DeclareOption{arrowvec}{\@arrowvectrue}
 
-\ProcessOptions\relax
+\newif\if@textvecdiff\@textvecdifffalse
+\DeclareOption{textvecdiff}{\@textvecdifftrue}
 
+\ProcessOptions\relax
 
 
 \if@arrowvec
 \else
-\renewcommand{\vec}[1]{\ensuremath{\bm{#1}}}
+\renewcommand{\vec}[1]{\bm{#1}}
 \fi
+
+\newcommand{\mtx}[1]{\mathrm{#1}}
+
+\newcommand{\ten}[1]{\underline{#1}}
 
 
 \newcommand{\heq}{\stackrel{\hat{\texttt{H}}}{=}}
@@ -57,14 +63,30 @@
 
 \newcommand{\pderiv}[3][]{\frac{\partial^{#1} #2}{\partial^{#1} #3}}
 
-\newcommand{\grad}{\nabla}
+\if@textvecdiff
+    \newcommand{\grad}{\text{grad }}
+\else
+    \newcommand{\grad}{\nabla}%
+\fi
 
 \let\divsymb=\div
-\renewcommand{\div}{\nabla\cdot}
+\if@textvecdiff
+    \renewcommand{\div}{\text{div}}
+\else
+    \renewcommand{\div}{\nabla\cdot}
+\fi
 
-\newcommand{\curl}{\nabla\times}
+\if@textvecdiff
+    \newcommand{\curl}{\text{curl }}
+\else
+    \newcommand{\curl}{\nabla\times}
+\fi
 
-\newcommand{\laplace}{\nabla^2}
+\if@textvecdiff
+    \newcommand{\laplace}{\text{div grad}}
+\else
+    \newcommand{\laplace}{\nabla^2}
+\fi
 
 \definecolor{hsr-blue}{HTML}{0065A3}
 \definecolor{hsr-blue80}{HTML}{3384B5}
