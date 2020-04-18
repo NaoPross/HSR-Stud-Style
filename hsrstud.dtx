@@ -35,6 +35,7 @@
 
 \RequirePackage{amsmath}
 \RequirePackage{amssymb}
+\RequirePackage{esint}
 \RequirePackage{bm}
 
 \RequirePackage{xcolor}
@@ -45,8 +46,20 @@
 \documentclass[a4paper]{ltxdoc}
 
 \usepackage{\jobname}
-\usepackage[numbered]{hypdoc}
 
+\usepackage[numbered]{hypdoc}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    citecolor=red!50!black,
+    filecolor=magenta!50!black,
+    urlcolor=blue!50!black
+}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\usepackage{verbatim}
 \usepackage{enumitem}
 \usepackage{framed}
 \usepackage{booktabs}
@@ -59,24 +72,25 @@
 ]{doclicense}
 
 \EnableCrossrefs
+\CodelineIndex
 \RecordChanges
 
+
 \newenvironment{example}[1]{%
-    \newcommand\src{#1}
-    \begin{leftbar}%
-    \begin{center}%
-    \begin{minipage}{.4\linewidth}%
-        \texttt{\src}
-    \end{minipage}%
-    \begin{minipage}{.4\linewidth}%
+    \leftbar
+    \begingroup\centering
+    \minipage[c]{.4\linewidth}
+        #1
+    \endminipage%
+    \minipage[c]{.4\linewidth}
 }{%
-    \end{minipage}%
-    \end{center}
-    \end{leftbar}
+    \endminipage
+    \endgroup
+    \endleftbar
 }
 
 \begin{document}
-  \DocInput{\jobname.dtx}
+    \DocInput{\jobname.dtx}
 \end{document}
 %</driver>
 % \fi
@@ -84,7 +98,7 @@
 
 %    \GetFileInfo{\jobname.sty}
 %    \title{^^A
-%      \texttt{hsrstud} --- HSR-Stud Style and Macros\thanks{^^A
+%      \texttt{\textcolor{hsr-blue}{hsr}stud} --- HSR-Stud Style and Macros\thanks{^^A
 %        This file describes version \fileversion, last revised \filedate.^^A
 %      }^^A
 %    }
@@ -92,6 +106,7 @@
 %    \date{Released \filedate}
 %    \maketitle
 %    \changes{v1.0}{2020/02/16}{Initial Draft}
+%    \tableofcontents
 
 
 %    \iffalse
@@ -113,7 +128,8 @@
 %
 %
 %    \end{description}
-%
+%   
+%    \DisableCrossrefs
 %    \begin{macrocode}
 \newif\if@arrowvec\@arrowvecfalse
 \DeclareOption{arrowvec}{\@arrowvectrue}
@@ -123,6 +139,7 @@
 
 \ProcessOptions\relax
 %    \end{macrocode}
+%    \EnableCrossrefs
 
 
 %    \section{Mathematics}
@@ -133,13 +150,10 @@
 %    \ref{sec:options} is enabled, the notation with a small arrow over the 
 %    varible will be used, else the vector is bold. Takes one option 
 %    \marg{letter}.
-%    \begin{example}{
-%       \cs{vec}\{F\} = m\cs{vec}\{a\}
-%    }
-%    \[ 
-%    \vec{F} = m\vec{a}
-%    \]
+%    \begin{example}{\[\vec{F} = m\vec{a}\]}
+%        |\vec{F} = m\vec{a}|
 %    \end{example}
+%
 %    \begin{macrocode}
 \if@arrowvec
 \else
@@ -150,13 +164,10 @@
 
 %    \begin{macro}{\uvec}
 %    Unit vector notation. Takes \marg{letter}.
-%    \begin{example}{
-%    ^^A \cs{uvec}\{x\} = \cs{\vec{x}^0}
-%    }
-%    \[
-%       \uvec{x} = \vec{x}/x
-%    \]
+%    \begin{example}{\[\uvec{x} = \vec{x}/x\]}
+%        |\uvec{x} = \vec{x}/x|
 %    \end{example}
+%
 %    \begin{macrocode}
 \newcommand{\uvec}[1]{\mathrm{\vec{\hat{#1}}}}
 %    \end{macrocode}
@@ -164,6 +175,15 @@
 
 %    \begin{macro}{\mtx}
 %    Matrix notation. Takes \marg{letter}.
+%    \begin{example}{\[
+%        \mtx{J} = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}
+%    \]}^^A
+%        |\mtx{J} = \begin{pmarix} |\\
+%        |            0 & 1  \\    |\\
+%        |            1 & 0        |\\
+%        |          \end{pmatrix}  |
+%    \end{example}
+%
 %    \begin{macrocode}
 \newcommand{\mtx}[1]{\mathrm{#1}}
 %    \end{macrocode}
@@ -171,8 +191,14 @@
 
 %    \begin{macro}{\ten}
 %    Tensor notation. Takes \marg{letter}.
+%    \begin{example}{\[
+%        \vec{T}^{(\vec{n})} = \uvec{n}\cdot\ten{\sigma}
+%    \]}^^A
+%        |\vec{T}^{(\vec{n})} =        |\\
+%        |    \uvec{n}\cdot\ten{\sigma}|
+%    \end{example}
 %    \begin{macrocode}
-\newcommand{\ten}[1]{\underline{#1}}
+\newcommand{\ten}[1]{\underline{\mathbf{\boldsymbol{#1}}}}
 %    \end{macrocode}
 %    \end{macro}
 
@@ -181,6 +207,16 @@
 
 %    \begin{macro}{\heq}
 %     L'H\^opital limit equality symbol.
+%    \begin{example}{\[
+%        \lim_{x\to\infty} \frac{x}{x^2 - 1}
+%            \heq \lim_{x\to\infty} \frac{1}{2x}
+%            = 0
+%    \]}
+%        |\lim_{x\to\infty} \frac{x}{x^2 - 1}   |\\
+%        |  \heq \lim_{x\to\infty} \frac{1}{2x} |\\
+%        |  = 0 |
+%    \end{example}
+
 %    \begin{macrocode}
 \newcommand{\heq}{\stackrel{\hat{\texttt{H}}}{=}}
 %    \end{macrocode}
@@ -191,14 +227,26 @@
 %    \begin{macro}{\dd}
 %    The differential element. It needs a \marg{var} and has the optional 
 %    argument \oarg{exponent}.
+%    \begin{example}{\[\dd{x}\qquad\dd[4]{x}\]}|\dd{x} \dd[4]{x}|\end{example}
+%    
 %    \begin{macrocode}
 \newcommand{\dd}[2][]{\mathrm{d}^{#1} #2}
 %    \end{macrocode}
 %    \end{macro}
 
 %    \begin{macro}{\di}
-%    This is the same as \cs{dd} but with a small space before in front, it is 
+%    This is the same as \cs{dd} but with a small space in front, it is 
 %    intended to be used in integrals for a nicer typesetting.
+%    \begin{example}{\begin{align*}
+%        I &= \int \vec{J}\cdot\dd{\vec{s}} \\
+%          &= \iint \vec{J}\cdot\uvec{n}\di{x}\di{y}
+%    \end{align*}}
+%        |% no spacing needed (because of cdot)| \\
+%        |I = \int\vec{J}\cdot\di{\vec{s}}     | \\
+%        |% needs spacing                      | \\
+%        |  = \iint\vec{J}\cdot\uvec{n}\di{x}\di{y} |
+%    \end{example}
+% 
 %    \begin{macrocode}
 \newcommand{\di}[2][]{\,\dd[#1]{#2}}
 %    \end{macrocode}
@@ -207,6 +255,11 @@
 %    \begin{macro}{\deriv}
 %    The derivative has arguments \marg{function}, \marg{var} and the optional 
 %    argument \oarg{order}.
+%    \begin{example}{\[\deriv{y}{x} \qquad \deriv[3]{y}{x}\]}
+%        |\deriv{y}{x}    |\\
+%        |\deriv[3]{y}{x} |
+%    \end{example}
+%
 %    \begin{macrocode}
 \newcommand{\deriv}[3][]{\frac{\dd[#1]{#2}}{\dd[]{#3^{#1}}}}
 %    \end{macrocode}
@@ -215,13 +268,20 @@
 %    \begin{macro}{\pderiv}
 %    The partial derivative has arguments \marg{function}, \marg{var} and the 
 %    optional argument \oarg{order}.
+%    \begin{example}{\[\pderiv{y}{x} \qquad \pderiv[2]{y}{x}\]}
+%        |\deriv{f}{x}    |\\
+%        |\deriv[2]{f}{x} |
+%    \end{example}
+%
 %    \begin{macrocode}
-\newcommand{\pderiv}[3][]{\frac{\partial^{#1} #2}{\partial^{#1} #3}}
+\newcommand{\pderiv}[3][]{\frac{\partial^{#1} #2}{\partial #3^{#1}}}
 %    \end{macrocode}
 %    \end{macro}
 
 %    \begin{macro}{\grad}
 %    The gradient operator.
+%    \begin{example}{\[\grad f\]}|\grad f|\end{example}
+%
 %    \begin{macrocode}
 \if@textvecdiff
     \newcommand{\grad}{\text{grad }}
@@ -233,6 +293,8 @@
 
 %    \begin{macro}{\div}
 %    The divergence operator, \cs{div} is renamed to \cs{divsymb}.
+%    \begin{example}{\[\div f\]}|\div f|\end{example}
+%
 %    \begin{macrocode}
 \let\divsymb=\div 
 \if@textvecdiff
@@ -246,6 +308,8 @@
 
 %    \begin{macro}{\curl}
 %    The curl operator.
+%    \begin{example}{\[\curl f\]}|\curl f|\end{example}
+%
 %    \begin{macrocode}
 \if@textvecdiff
     \newcommand{\curl}{\text{curl }}
@@ -257,6 +321,8 @@
 
 %    \begin{macro}{\laplace}
 %    The laplace operator.
+%    \begin{example}{\[\laplace f\]}|\laplace f|\end{example}
+%
 %    \begin{macrocode}
 \if@textvecdiff
     \newcommand{\laplace}{\text{div grad}}
@@ -270,14 +336,14 @@
 %    \begin{center}
 %    \begin{tikzpicture}
 %       \foreach \color/\y in {%
-%           hsr-blue/0,
-%           hsr-mauve/-1,
-%           hsr-lakegreen/-2,
-%           hsr-reed/-3,
-%           hsr-petrol/-4,
-%           hsr-basswood/-5,
-%           hsr-lightgrey/-6,
-%           hsr-black/-7}{
+%           hsr-blue/7,
+%           hsr-mauve/6,
+%           hsr-lakegreen/5,
+%           hsr-reed/4,
+%           hsr-petrol/3,
+%           hsr-basswood/2,
+%           hsr-lightgrey/1,
+%           hsr-black/0}{
 %           \foreach \x/\a in {0/,1/80,2/60,3/40,4/20}{
 %               \node[anchor=east] at (-.5,\y) {\texttt{\color}};
 %               \fill[color=\color\a] (\x,\y-.25) rectangle ++(1,.5);
@@ -286,7 +352,16 @@
 %       }
 %    \end{tikzpicture}
 %    \end{center}
+
+%    \StopEventually{^^A
+%       \PrintChanges
+%       \PrintIndex
 %
+%       \section{License}
+%       \doclicenseThis
+%   }
+%
+%    \DisableCrossrefs
 %    \begin{macrocode}
 \definecolor{hsr-blue}{HTML}{0065A3}
 \definecolor{hsr-blue80}{HTML}{3384B5}
@@ -336,14 +411,7 @@
 \definecolor{hsr-black40}{HTML}{A4A2A4}
 \definecolor{hsr-black20}{HTML}{D1D1D1}
 %    \end{macrocode}
-
-%    \section{License}
-%    \doclicenseThis
-
-%    \StopEventually{^^A
-%      \PrintChanges
-%    }
-
+%    \EnableCrossrefs
 
 %    \iffalse
 %    \begin{macrocode}
