@@ -61,10 +61,18 @@
 \EnableCrossrefs
 \RecordChanges
 
-\newenvironment{example}{%
+\newenvironment{example}[1]{%
+    \newcommand\src{#1}
     \begin{leftbar}%
+    \begin{center}%
+    \begin{minipage}{.4\linewidth}%
+        \texttt{\src}
+    \end{minipage}%
+    \begin{minipage}{.4\linewidth}%
 }{%
-    \end{leftbar}%
+    \end{minipage}%
+    \end{center}
+    \end{leftbar}
 }
 
 \begin{document}
@@ -125,13 +133,13 @@
 %    \ref{sec:options} is enabled, the notation with a small arrow over the 
 %    varible will be used, else the vector is bold. Takes one option 
 %    \marg{letter}.
-%
-%    \begin{example}
+%    \begin{example}{
+%       \cs{vec}\{F\} = m\cs{vec}\{a\}
+%    }
 %    \[ 
 %    \vec{F} = m\vec{a}
 %    \]
 %    \end{example}
-%
 %    \begin{macrocode}
 \if@arrowvec
 \else
@@ -142,8 +150,15 @@
 
 %    \begin{macro}{\uvec}
 %    Unit vector notation. Takes \marg{letter}.
+%    \begin{example}{
+%    ^^A \cs{uvec}\{x\} = \cs{\vec{x}^0}
+%    }
+%    \[
+%       \uvec{x} = \vec{x}/x
+%    \]
+%    \end{example}
 %    \begin{macrocode}
-\newcommand{\uvec}[1]{\mathrm{\hat{#1}}}
+\newcommand{\uvec}[1]{\mathrm{\vec{\hat{#1}}}}
 %    \end{macrocode}
 %    \end{macro}
 
