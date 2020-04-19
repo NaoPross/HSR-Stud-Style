@@ -32,43 +32,25 @@
 %<*package>
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{hsrstud}[2020/04/16 v0.1 HSR-Stud Macros]
-
-\RequirePackage{amsmath}
-\RequirePackage{amssymb}
-\RequirePackage{bm}
-
-\RequirePackage{esint}
-\RequirePackage[b]{esvect}
-
-
-\RequirePackage{xcolor}
 %</package>
 
 
-%<*driver>
+%<*doc>
 \documentclass[a4paper]{ltxdoc}
 
 \usepackage{\jobname}
 
 %% https://tex.stackexchange.com/questions/95882/avoid-multicol-error-error-saving-partial-page
-\setlength\IndexMin{100pt}
-
-\usepackage{hypdoc}
-\hypersetup{
-    colorlinks=true,
-    linkcolor=black,
-    citecolor=red!50!black,
-    filecolor=magenta!50!black,
-    urlcolor=blue!50!black
-}
+%% \setlength\IndexMin{100pt}
 
 \usepackage[left=4cm, right=4cm, top=3cm, bottom=3cm]{geometry}
 
-\usepackage{verbatim}
+\usepackage{fancyvrb}
 \usepackage{enumitem}
 \usepackage{framed}
 \usepackage{booktabs}
 \usepackage{tikz}
+\usepackage{xargs}
 
 \usepackage[
     type={CC},
@@ -79,69 +61,313 @@
 \CodelineIndex
 \RecordChanges
 
-
-\newenvironment{example}[1]{%
-    \leftbar
-    \begingroup\centering
-    \minipage[c]{.4\linewidth}
-        #1
-    \endminipage%
-    \minipage[c]{.4\linewidth}
+\makeatletter
+\newlength\excodewidth
+\newenvironment{example}{%
+    \leftbar\VerbatimEnvironment%
+    \global\excodewidth=.5\linewidth%
+    \begin{VerbatimOut}{\jobname.vrb}%
 }{%
-    \endminipage
-    \endgroup
-    \endleftbar
+    \end{VerbatimOut}%
+    \noindent%
+    \minipage[c]{\excodewidth}%
+        \vspace{0pt}\input{\jobname.vrb}%
+    \endminipage%
+    \minipage[c]{\dimexpr\linewidth-\excodewidth-2\fboxsep-2\fboxrule-\FrameSep\relax}%
+        \vspace{0pt}\lstinputlisting{\jobname.vrb}%
+    \endminipage%
+    \endleftbar%
 }
 
+\newenvironment{hexample}{%
+    \leftbar\VerbatimEnvironment%
+    \begin{VerbatimOut}{\jobname.vrb}%
+}{%
+    \end{VerbatimOut}%
+    \noindent%
+    \begingroup\centering%
+    \hspace{5pt}%
+    \minipage[t]{\linewidth}%
+        \vspace{0pt}\input{\jobname.vrb}%
+    \endminipage\\
+    \hspace{5pt}%
+    \minipage[t]{\linewidth}%
+        \vspace{0pt}\lstinputlisting{\jobname.vrb}%
+    \endminipage%
+    \endgroup%
+    \endleftbar%
+}
+
+
+\makeatother
+
 \begin{document}
-    \DocInput{\jobname.dtx}
+\GetFileInfo{\jobname.sty}
+\title{^^A
+  \texttt{\textcolor{hsr-blue}{hsr}stud} --- HSR-Stud Style and Macros\thanks{^^A
+    This file describes version \fileversion, last revised \filedate.^^A
+  }^^A
+}
+\author{Naoki Pross \texttt{<npross@hsr.ch>}}
+\date{Released \filedate}
+\maketitle
+\tableofcontents
+
+\changes{v0.1}{2020/02/16}{Initial Draft}
+
+\section{Purpose of this package}
+This package is made for the HSR Studenten organization to provide a 
+consistent style and source syntax across documents.
+
+\section{Dependencies}
+The following packages are automatically loaded and do not need to be set up.
+
+\section{Package Options} \label{sec:options}
+\begin{description}[align=right]
+   \item[\texttt{arrowvec}] Tells the package to use a vector notation 
+   with a small arrow over the variables, as it were handwritten.
+
+   \item[\texttt{textvecdiff}] Disables the ``Nabla'' or ``Del'' notation 
+   for vector derivatives. Instead the symbols
+   \(\nabla, \nabla \cdot, \nabla \times, \nabla^2\) are be replaced with 
+   grad, div, curl and div grad.
+\end{description}
+
+\section{Default Theming}
+\subsection{Links with \texttt{hyperref}}
+
+\begin{example}
+Colors from 
+\cite{bib:hsrcolors} see \\
+\url{https://intranet.hsr.ch}
+\end{example}
+
+\subsection{Source Code with \texttt{listings}}
+
+\begin{hexample}
+\begin{lstlisting}[language=C++]
+int main(int argc, char *argv[], char *envp[]) {
+   std::cout << "hello world" << std::endl;
+}
+\end{lstlisting}
+\end{hexample}
+
+\section{Mathematics}
+\subsection{Vectors}
+
+\begin{macro}{\vec, \v}
+Vectors notation. If the option \texttt{arrowvec} described in \S 
+\ref{sec:options} is enabled, the notation with a small arrow over the 
+varible will be used \(\hsrvecarrow{x}\), otherwise the vector is bold
+\(\hsrvecbold{x}\). Takes one option \marg{letter}.
+\begin{example}
+\[ \vec{F} = m\vec{a} \]
+\end{example}
+\end{macro}
+
+\begin{macro}{\uvec, \uv}
+Unit vector notation. Takes \marg{letter}. It is implemented in terms of
+\cmd{\vec}, which means that the style is inherited.
+
+\begin{example}
+\[ \uvec{x} = \vec{x}/x \]
+\end{example}
+\end{macro}
+
+\subsubsection{Products}
+\begin{macro}{\dotp}
+Dot product between vectors.
+\begin{example}
+\[ \vec{u}\dotp\vec{v} \]
+\end{example}
+\end{macro}
+
+\begin{macro}{\crossp, \cross}
+Cross product between vectors.
+\begin{example}
+\[ \vec{u}\cross\vec{v} \]
+\end{example}
+\end{macro}
+
+
+\subsection{Matrices and Tensors}
+
+\begin{macro}{\mtx}
+Matrix notation. Takes \marg{letter}.
+
+\begin{example}
+\[
+    \mtx{J} = \begin{pmatrix}
+                0 & 1 \\
+                1 & 0
+              \end{pmatrix}
+\]
+\end{example}
+\end{macro}
+
+\begin{macro}{\ten}
+Tensor notation. Takes \marg{letter}.
+\begin{example}
+\[
+   \vec{T}^{(\vec{n})} =
+   \uvec{n}\dotp\ten{\sigma}
+\]
+\end{example}
+\end{macro}
+
+\subsection{Equalities}
+
+\begin{macro}{\heq}
+ L'H\^opital limit equality symbol.
+\begin{example}
+\[
+    \lim_{x\to\infty} \frac{x}{x^2 - 1}
+        \heq \lim_{x\to\infty} \frac{1}{2x}
+        = 0
+\]
+\end{example}
+\end{macro}
+
+\subsection{Derivatives}
+\subsubsection{Differentials}
+
+\begin{macro}{\dd}
+The differential element. It needs a \marg{var} and has the optional 
+argument \oarg{order}.
+\begin{example}
+\[ \dd{x} \qquad \dd[4]{x} \]
+\end{example}
+\end{macro}
+
+\begin{macro}{\di}
+This is the same as \cs{dd} but with a small space in front, it is 
+intended to be used in integrals for a nicer typesetting.
+\begin{example}
+\begin{align*}
+    I &= \int \vec{J}\dotp\dd{\vec{s}} \\
+      &= \iint \vec{J}\dotp\uvec{n}\di{x}\di{y}
+\end{align*}
+\end{example}
+\end{macro}
+
+\subsubsection{Classical}
+
+\begin{macro}{\deriv}
+The derivative has arguments \marg{function}, \marg{var} and the optional 
+argument \oarg{order}.
+\begin{example}
+\[
+    \deriv{y}{x} \qquad
+    \deriv[3]{y}{x}
+\]
+\end{example}
+\end{macro}
+
+%% TODO: add mixed partial derivatives (probably using xparse)
+\begin{macro}{\pderiv}
+The partial derivative has arguments \marg{function}, \marg{var} and the 
+optional argument \oarg{order}.
+\begin{example}
+\[
+    \pderiv{y}{x} \qquad
+    \pderiv[3]{y}{x}
+\]
+\end{example}
+\end{macro}
+
+\subsubsection{Vector}
+
+\begin{macro}{\grad}
+The gradient operator.
+\begin{example}
+\[ \grad f \]
+\end{example}
+\end{macro}
+
+\begin{macro}{\div}
+The divergence operator, \cs{div} is renamed to \cs{divsymb}.
+\begin{example}
+\[ \div f \]
+\end{example}
+\end{macro}
+
+\begin{macro}{\curl}
+The curl operator.
+\begin{example}
+\[ \curl f \]
+\end{example}
+\end{macro}
+
+\begin{macro}{\laplace}
+The laplace operator.
+\begin{example}
+\[ \laplace f \]
+\end{example}
+\end{macro}
+
+
+\section{Colors}
+\begin{center}
+\begin{tikzpicture}
+   \foreach \color/\y in {%
+       hsr-blue/7,
+       hsr-mauve/6,
+       hsr-lakegreen/5,
+       hsr-reed/4,
+       hsr-petrol/3,
+       hsr-basswood/2,
+       hsr-lightgrey/1,
+       hsr-black/0}{
+       \foreach \x/\a in {0/,1/80,2/60,3/40,4/20}{
+           \node[anchor=east] at (-.5,\y) {\texttt{\color}};
+           \fill[color=\color\a] (\x,\y-.25) rectangle ++(1,.5);
+           \node[anchor=west] at (\x,\y) {\texttt{\a}};
+       }
+   }
+\end{tikzpicture}
+\end{center}
+
+\begin{thebibliography}{3}
+    \bibitem{bib:hsrcolors}
+        HSR Intern: Corporate Design / Farben,
+        \textit{Hochschule f\"ur Technik Rapperswil},
+        \url{https://intranet.hsr.ch/Farben.7715.0.html}
+\end{thebibliography}
+
+\section{License}
+\doclicenseThis
+
+
+
+\DocInput{\jobname.dtx}
 \end{document}
-%</driver>
-% \fi
 
+%</doc>
+%\fi
 
-%    \GetFileInfo{\jobname.sty}
-%    \title{^^A
-%      \texttt{\textcolor{hsr-blue}{hsr}stud} --- HSR-Stud Style and Macros\thanks{^^A
-%        This file describes version \fileversion, last revised \filedate.^^A
-%      }^^A
-%    }
-%    \author{Naoki Pross \texttt{<npross@hsr.ch>}}
-%    \date{Released \filedate}
-%    \maketitle
-%    \tableofcontents
-
-%    \changes{v0.1}{2020/02/16}{Initial Draft}
-
-
-%    \iffalse
-%    \begin{macrocode}
+%\iffalse
 %<*package>
+%\fi
+
+%    \section{Implementation}
+%    \subsection{Dependencies}
+%    \begin{macrocode}
+%% Dependencies ((
+\RequirePackage{amsmath}
+\RequirePackage{amssymb}
+\RequirePackage{bm}
+
+\RequirePackage{esint}
+\PassOptionsToPackage{b}{esvect}
+\RequirePackage{esvect}
+
+\RequirePackage{xcolor}
+\RequirePackage{hyperref}
+\RequirePackage{listings}
+%% ))
 %    \end{macrocode}
-%    \fi
 
-
-
-
-%    \section{Introduction}
-%    This package is made for the HSR Studenten organization to provide a 
-%    consistent style and source syntax across documents.
-%
-
-
-%    \section{Package Options} \label{sec:options}
-%    \begin{description}[align=right]
-%       \item[\texttt{arrowvec}] Tells the package to use a vector notation 
-%       with a small arrow over the variables, as it were handwritten.
-%
-%       \item[\texttt{textvecdiff}] Disables the ``Nabla'' or ``Del'' notation 
-%       for vector derivatives. Instead the symbols
-%       \(\nabla, \nabla \cdot, \nabla \times, \nabla^2\) are be replaced with 
-%       grad, div, curl and div grad.
-%
-%
-%    \end{description}
-%   
+%    \subsection{Package options}
 %    \begin{macrocode}
 \newif\if@arrowvec\@arrowvecfalse
 \DeclareOption{arrowvec}{\@arrowvectrue}
@@ -153,26 +379,56 @@
 %    \end{macrocode}
 
 
-%    \EnableCrossrefs
-
-%    \section{Mathematics}
-%    \subsection{Vectors}
-
-%    \begin{macro}{\vec, \v}
-%    Vectors notation. If the option \texttt{arrowvec} described in \S 
-%    \ref{sec:options} is enabled, the notation with a small arrow over the 
-%    varible will be used, otherwise the vector is bold. Takes one option 
-%    \marg{letter}.
-%
-%    \begin{example}{\[
-%       \hsrvecbold{F} = m\hsrvecbold{a}
-%       \qquad
-%       \hsrvecarrow{F} = m\hsrvecarrow{a}
-%    \]}
-%        |\vec{F} = m\vec{a}|
-%    \end{example}
-%
+%    \subsection{Default theming}
 %    \begin{macrocode}
+%% Theming for hyperref and listings ((
+\hypersetup{
+    colorlinks=true,
+    linkcolor=hsr-black,
+    citecolor=hsr-mauve,
+    filecolor=hsr-black,
+    urlcolor=hsr-blue,
+}
+
+%% Common listings settings
+\lstdefinestyle{hsr-base}{
+    belowcaptionskip=\baselineskip,
+    breaklines=true,
+    frame=none,
+    inputencoding=utf8,
+    % margin
+    xleftmargin=\parindent,
+    % numbers
+    numbers=left,
+    numbersep=5pt,
+    numberstyle=\ttfamily\footnotesize\color{hsr-black40},
+    % background
+    backgroundcolor=\color{white},
+    showstringspaces=false,
+    % default language
+    language=[LaTeX]TeX,
+    % font
+    basicstyle=\ttfamily\small,
+    identifierstyle=\color{hsr-black},
+    keywordstyle=\color{hsr-blue},
+    commentstyle=\color{hsr-black40},
+    stringstyle=\color{hsr-mauve80},
+}
+
+%% Define missing languages / aliases
+\lstdefinelanguage{LaTeX}{
+    language=[LaTeX]Tex
+}
+
+%% Set style
+\lstset{style=hsr-base, escapechar=`}        
+%%))
+%    \end{macrocode}
+
+%    \subsection{Mathematics}
+%    \subsubsection{Vectors}
+%    \begin{macrocode}
+%% Vector ((
 \newcommand{\hsrvecbold}[1]{\mathbf{\boldsymbol{#1}}}
 \newcommand{\hsrvecarrow}[1]{\vv{\mathrm{#1}}} % from esvect
 \newcommand{\@hsrvecf}[1]{\hsrvecbold{#1}}
@@ -186,21 +442,9 @@
 % redefine
 \renewcommand{\v}[1]{\@hsrvecf{#1}}
 \renewcommand{\vec}[1]{\@hsrvecf{#1}}
-%    \end{macrocode}
-%    \end{macro}
+%%))
 
-%    \begin{macro}{\uvec, \uv}
-%    Unit vector notation. Takes \marg{letter}. It is implemented in terms of
-%    \cmd{\vec}, which means that the style is inherited.
-%    \begin{example}{\[
-%        \hsruvecbold{x} = \hsrvecbold{x}/x 
-%        \qquad
-%        \hsruvecarrow{x} = \hsrvecarrow{x}/x
-%    \]}
-%        |\uvec{x} = \vec{x}/x|
-%    \end{example}
-%
-%    \begin{macrocode}
+%% Unit vector ((
 \newcommand{\hsruvecbold}[1]{\vec{\hat{#1}}}
 \newcommand{\hsruvecarrow}[1]{\hat{\mathrm{#1}}}
 \newcommand{\@hsruvecf}[1]{\hsruvecbold{#1}}
@@ -210,240 +454,68 @@
 
 \newcommand{\uv}[1]{\@hsruvecf{#1}}
 \newcommand{\uvec}[1]{\@hsruvecf{#1}}
-%    \end{macrocode}
-%    \end{macro}
+%%))
 
-%    \begin{macro}{\dotp}
-%    Dot product between vectors.
-%    \begin{example}{\[
-%       \vec{u}\dotp\vec{v}
-%    \]}
-%       |\vec{u}\dotp\vec{v}|
-%    \end{example}
-%
-%    \subsubsection{Products}
-%
-%    \begin{macrocode}
+%% Products ((
 \newcommand{\dotp}{\boldsymbol\cdot}
-%    \end{macrocode}
-%    \end{macro}
-
-%    \begin{macro}{\crossp, \cross}
-%    Cross product between vectors.
-%    \begin{example}{\[
-%       \vec{u}\cross\vec{v}
-%    \]}
-%       |\vec{u}\cross\vec{v}|
-%    \end{example}
-%
-%    \begin{macrocode}
 \newcommand{\crossp}{\boldsymbol\times}
-\newcommand{\cross}{\boldsymbol\times}
+\newcommand{\cross}{\crossp}
+%%))
 %    \end{macrocode}
-%    \end{macro}
 
-
-
-%    \subsection{Matrices and Tensors}
-
-%    \begin{macro}{\mtx}
-%    Matrix notation. Takes \marg{letter}.
-%    \begin{example}{\[
-%        \mtx{J} = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}
-%    \]}^^A
-%        |\mtx{J} = \begin{pmarix} |\\
-%        |            0 & 1  \\    |\\
-%        |            1 & 0        |\\
-%        |          \end{pmatrix}  |
-%    \end{example}
-%
+%    \subsubsection{Matrices and Tensors}
 %    \begin{macrocode}
 \newcommand{\mtx}[1]{\mathrm{#1}}
-%    \end{macrocode}
-%    \end{macro}
-
-%    \begin{macro}{\ten}
-%    Tensor notation. Takes \marg{letter}.
-%    \begin{example}{\[
-%        \vec{T}^{(\vec{n})} = \uvec{n}\cdot\ten{\sigma}
-%    \]}^^A
-%        |\vec{T}^{(\vec{n})} =        |\\
-%        |    \uvec{n}\cdot\ten{\sigma}|
-%    \end{example}
-%    \begin{macrocode}
 \newcommand{\ten}[1]{\underline{\mathbf{\boldsymbol{#1}}}}
 %    \end{macrocode}
-%    \end{macro}
 
-
-%    \subsection{Equalities}
-
-%    \begin{macro}{\heq}
-%     L'H\^opital limit equality symbol.
-%    \begin{example}{\[
-%        \lim_{x\to\infty} \frac{x}{x^2 - 1}
-%            \heq \lim_{x\to\infty} \frac{1}{2x}
-%            = 0
-%    \]}
-%        |\lim_{x\to\infty} \frac{x}{x^2 - 1}   |\\
-%        |  \heq \lim_{x\to\infty} \frac{1}{2x} |\\
-%        |  = 0 |
-%    \end{example}
-
+%    \subsubsection{Equalities}
 %    \begin{macrocode}
 \newcommand{\heq}{\stackrel{\hat{\texttt{H}}}{=}}
 %    \end{macrocode}
-%    \end{macro}
 
 %    \subsection{Derivatives}
 %    \subsubsection{Differentials}
-
-%    \begin{macro}{\dd}
-%    The differential element. It needs a \marg{var} and has the optional 
-%    argument \oarg{order}.
-%    \begin{example}{\[\dd{x}\qquad\dd[4]{x}\]}|\dd{x} \dd[4]{x}|\end{example}
-%    
 %    \begin{macrocode}
 \newcommand{\dd}[2][]{\mathrm{d}^{#1} #2}
-%    \end{macrocode}
-%    \end{macro}
-
-%    \begin{macro}{\di}
-%    This is the same as \cs{dd} but with a small space in front, it is 
-%    intended to be used in integrals for a nicer typesetting.
-%    \begin{example}{\begin{align*}
-%        I &= \int \vec{J}\dotp\dd{\vec{s}} \\
-%          &= \iint \vec{J}\dotp\uvec{n}\di{x}\di{y}
-%    \end{align*}}
-%        |% no spacing needed (because of dotp)| \\
-%        |I = \int\vec{J}\dotp\dd{\vec{s}}     | \\
-%        |% needs spacing between dx and dy    | \\
-%        |  = \iint\vec{J}\dotp\uvec{n}\di{x}\di{y} |
-%    \end{example}
-% 
-%    \begin{macrocode}
 \newcommand{\di}[2][]{\,\dd[#1]{#2}}
 %    \end{macrocode}
-%    \end{macro}
 
-%    \subsubsection{Classical}
-
-%    \begin{macro}{\deriv}
-%    The derivative has arguments \marg{function}, \marg{var} and the optional 
-%    argument \oarg{order}.
-%    \begin{example}{\[\deriv{y}{x} \qquad \deriv[3]{y}{x}\]}
-%        |\deriv{y}{x}    |\\
-%        |\deriv[3]{y}{x} |
-%    \end{example}
-%
+%    \subsubsection{Derivatives}
 %    \begin{macrocode}
 \newcommand{\deriv}[3][]{\frac{\dd[#1]{#2}}{\dd[]{#3^{#1}}}}
-%    \end{macrocode}
-%    \end{macro}
-
-%    ^^A TODO: add mixed partial derivatives (probably using xparse)
-%    \begin{macro}{\pderiv}
-%    The partial derivative has arguments \marg{function}, \marg{var} and the 
-%    optional argument \oarg{order}.
-%    \begin{example}{\[\pderiv{y}{x} \qquad \pderiv[2]{y}{x}\]}
-%        |\deriv{f}{x}    |\\
-%        |\deriv[2]{f}{x} |
-%    \end{example}
-%
-%    \begin{macrocode}
 \newcommand{\pderiv}[3][]{\frac{\partial^{#1} #2}{\partial #3^{#1}}}
 %    \end{macrocode}
-%    \end{macro}
 
-
-%    \subsubsection{Vector}
-
-%    \begin{macro}{\grad}
-%    The gradient operator.
-%    \begin{example}{\[\grad f\]}|\grad f|\end{example}
-%
+%    \subsubsection{Vector derivatives}
 %    \begin{macrocode}
 \if@textvecdiff
     \newcommand{\grad}{\text{grad }}
 \else
     \newcommand{\grad}{\nabla}%
 \fi
-%    \end{macrocode}
-%    \end{macro}
 
-%    \begin{macro}{\div}
-%    The divergence operator, \cs{div} is renamed to \cs{divsymb}.
-%    \begin{example}{\[\div f\]}|\div f|\end{example}
-%
-%    \begin{macrocode}
 \let\divsymb=\div 
 \if@textvecdiff
     \renewcommand{\div}{\text{div}}
 \else
     \renewcommand{\div}{\nabla\cdot}
 \fi
-%    \end{macrocode}
-%    \end{macro}
 
-
-%    \begin{macro}{\curl}
-%    The curl operator.
-%    \begin{example}{\[\curl f\]}|\curl f|\end{example}
-%
-%    \begin{macrocode}
 \if@textvecdiff
     \newcommand{\curl}{\text{curl }}
 \else
     \newcommand{\curl}{\nabla\times}
 \fi
-%    \end{macrocode}
-%    \end{macro}
 
-%    \begin{macro}{\laplace}
-%    The laplace operator.
-%    \begin{example}{\[\laplace f\]}|\laplace f|\end{example}
-%
-%    \begin{macrocode}
 \if@textvecdiff
     \newcommand{\laplace}{\text{div grad}}
 \else
     \newcommand{\laplace}{\nabla^2}
 \fi
 %    \end{macrocode}
-%    \end{macro}
 
-
-%    \DisableCrossrefs
-
-%    \section{Colors}
-%    \begin{center}
-%    \begin{tikzpicture}
-%       \foreach \color/\y in {%
-%           hsr-blue/7,
-%           hsr-mauve/6,
-%           hsr-lakegreen/5,
-%           hsr-reed/4,
-%           hsr-petrol/3,
-%           hsr-basswood/2,
-%           hsr-lightgrey/1,
-%           hsr-black/0}{
-%           \foreach \x/\a in {0/,1/80,2/60,3/40,4/20}{
-%               \node[anchor=east] at (-.5,\y) {\texttt{\color}};
-%               \fill[color=\color\a] (\x,\y-.25) rectangle ++(1,.5);
-%               \node[anchor=west] at (\x,\y) {\texttt{\a}};
-%           }
-%       }
-%    \end{tikzpicture}
-%    \end{center}
-
-%    \StopEventually{^^A
-%       \PrintChanges
-%%^^A\PrintIndex
-%
-%       \section*{License}
-%       \doclicenseThis
-%   }
-%
+%    \subsection{Colors}
 %    \begin{macrocode}
 \definecolor{hsr-blue}{HTML}{0065A3}
 \definecolor{hsr-blue80}{HTML}{3384B5}

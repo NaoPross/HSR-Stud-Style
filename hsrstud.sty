@@ -24,19 +24,21 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{hsrstud}[2020/04/16 v0.1 HSR-Stud Macros]
 
+
+
+%% Dependencies ((
 \RequirePackage{amsmath}
 \RequirePackage{amssymb}
 \RequirePackage{bm}
 
 \RequirePackage{esint}
-\RequirePackage[b]{esvect}
+\PassOptionsToPackage{b}{esvect}
+\RequirePackage{esvect}
 
 \RequirePackage{xcolor}
-
-
-
-
-
+\RequirePackage{hyperref}
+\RequirePackage{listings}
+%% ))
 
 \newif\if@arrowvec\@arrowvecfalse
 \DeclareOption{arrowvec}{\@arrowvectrue}
@@ -46,8 +48,50 @@
 
 \ProcessOptions\relax
 
+%% Theming for hyperref and listings ((
+\hypersetup{
+    colorlinks=true,
+    linkcolor=hsr-black,
+    citecolor=hsr-mauve,
+    filecolor=hsr-black,
+    urlcolor=hsr-blue,
+}
 
+%% Common listings settings
+\lstdefinestyle{hsr-base}{
+    belowcaptionskip=\baselineskip,
+    breaklines=true,
+    frame=none,
+    inputencoding=utf8,
+    % margin
+    xleftmargin=\parindent,
+    % numbers
+    numbers=left,
+    numbersep=5pt,
+    numberstyle=\ttfamily\footnotesize\color{hsr-black40},
+    % background
+    backgroundcolor=\color{white},
+    showstringspaces=false,
+    % default language
+    language=[LaTeX]TeX,
+    % font
+    basicstyle=\ttfamily\small,
+    identifierstyle=\color{hsr-black},
+    keywordstyle=\color{hsr-blue},
+    commentstyle=\color{hsr-black40},
+    stringstyle=\color{hsr-mauve80},
+}
 
+%% Define missing languages / aliases
+\lstdefinelanguage{LaTeX}{
+    language=[LaTeX]Tex
+}
+
+%% Set style
+\lstset{style=hsr-base, escapechar=`}
+%%))
+
+%% Vector ((
 \newcommand{\hsrvecbold}[1]{\mathbf{\boldsymbol{#1}}}
 \newcommand{\hsrvecarrow}[1]{\vv{\mathrm{#1}}} % from esvect
 \newcommand{\@hsrvecf}[1]{\hsrvecbold{#1}}
@@ -59,7 +103,9 @@
 \newcommand{\oldvec}{\vec}
 \renewcommand{\v}[1]{\@hsrvecf{#1}}
 \renewcommand{\vec}[1]{\@hsrvecf{#1}}
+%%))
 
+%% Unit vector ((
 \newcommand{\hsruvecbold}[1]{\vec{\hat{#1}}}
 \newcommand{\hsruvecarrow}[1]{\hat{\mathrm{#1}}}
 \newcommand{\@hsruvecf}[1]{\hsruvecbold{#1}}
@@ -69,31 +115,24 @@
 
 \newcommand{\uv}[1]{\@hsruvecf{#1}}
 \newcommand{\uvec}[1]{\@hsruvecf{#1}}
+%%))
 
+%% Products ((
 \newcommand{\dotp}{\boldsymbol\cdot}
-
 \newcommand{\crossp}{\boldsymbol\times}
-\newcommand{\cross}{\boldsymbol\times}
-
+\newcommand{\cross}{\crossp}
+%%))
 
 \newcommand{\mtx}[1]{\mathrm{#1}}
-
 \newcommand{\ten}[1]{\underline{\mathbf{\boldsymbol{#1}}}}
-
-
 
 \newcommand{\heq}{\stackrel{\hat{\texttt{H}}}{=}}
 
-
 \newcommand{\dd}[2][]{\mathrm{d}^{#1} #2}
-
 \newcommand{\di}[2][]{\,\dd[#1]{#2}}
 
-
 \newcommand{\deriv}[3][]{\frac{\dd[#1]{#2}}{\dd[]{#3^{#1}}}}
-
 \newcommand{\pderiv}[3][]{\frac{\partial^{#1} #2}{\partial #3^{#1}}}
-
 
 \if@textvecdiff
     \newcommand{\grad}{\text{grad }}
@@ -120,9 +159,6 @@
     \newcommand{\laplace}{\nabla^2}
 \fi
 
-
-
-%%^^A\PrintIndex
 \definecolor{hsr-blue}{HTML}{0065A3}
 \definecolor{hsr-blue80}{HTML}{3384B5}
 \definecolor{hsr-blue60}{HTML}{66A3C8}
