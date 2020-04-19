@@ -35,8 +35,11 @@
 
 \RequirePackage{amsmath}
 \RequirePackage{amssymb}
-\RequirePackage{esint}
 \RequirePackage{bm}
+
+\RequirePackage{esint}
+\RequirePackage[b]{esvect}
+
 
 \RequirePackage{xcolor}
 %</package>
@@ -47,7 +50,10 @@
 
 \usepackage{\jobname}
 
-\usepackage[numbered]{hypdoc}
+%% https://tex.stackexchange.com/questions/95882/avoid-multicol-error-error-saving-partial-page
+\setlength\IndexMin{100pt}
+
+\usepackage{hypdoc}
 \hypersetup{
     colorlinks=true,
     linkcolor=black,
@@ -56,8 +62,7 @@
     urlcolor=blue!50!black
 }
 
-\usepackage{amsmath}
-\usepackage{amssymb}
+\usepackage[left=4cm, right=4cm, top=3cm, bottom=3cm]{geometry}
 
 \usepackage{verbatim}
 \usepackage{enumitem}
@@ -71,7 +76,6 @@
     version={4.0},
 ]{doclicense}
 
-\EnableCrossrefs
 \CodelineIndex
 \RecordChanges
 
@@ -105,8 +109,9 @@
 %    \author{Naoki Pross \texttt{<npross@hsr.ch>}}
 %    \date{Released \filedate}
 %    \maketitle
-%    \changes{v1.0}{2020/02/16}{Initial Draft}
 %    \tableofcontents
+
+%    \changes{v0.1}{2020/02/16}{Initial Draft}
 
 
 %    \iffalse
@@ -114,6 +119,14 @@
 %<*package>
 %    \end{macrocode}
 %    \fi
+
+
+
+
+%    \section{Introduction}
+%    This package is made for the HSR Studenten organization to provide a 
+%    consistent style and source syntax across documents.
+%
 
 
 %    \section{Package Options} \label{sec:options}
@@ -129,7 +142,6 @@
 %
 %    \end{description}
 %   
-%    \DisableCrossrefs
 %    \begin{macrocode}
 \newif\if@arrowvec\@arrowvecfalse
 \DeclareOption{arrowvec}{\@arrowvectrue}
@@ -139,39 +151,100 @@
 
 \ProcessOptions\relax
 %    \end{macrocode}
+
+
 %    \EnableCrossrefs
 
-
 %    \section{Mathematics}
-%    \subsection{Formatting}
+%    \subsection{Vectors}
 
-%    \begin{macro}{\vec}
+%    \begin{macro}{\vec, \v}
 %    Vectors notation. If the option \texttt{arrowvec} described in \S 
 %    \ref{sec:options} is enabled, the notation with a small arrow over the 
-%    varible will be used, else the vector is bold. Takes one option 
+%    varible will be used, otherwise the vector is bold. Takes one option 
 %    \marg{letter}.
-%    \begin{example}{\[\vec{F} = m\vec{a}\]}
+%
+%    \begin{example}{\[
+%       \hsrvecbold{F} = m\hsrvecbold{a}
+%       \qquad
+%       \hsrvecarrow{F} = m\hsrvecarrow{a}
+%    \]}
 %        |\vec{F} = m\vec{a}|
 %    \end{example}
 %
 %    \begin{macrocode}
+\newcommand{\hsrvecbold}[1]{\mathbf{\boldsymbol{#1}}}
+\newcommand{\hsrvecarrow}[1]{\vv{\mathrm{#1}}} % from esvect
+\newcommand{\@hsrvecf}[1]{\hsrvecbold{#1}}
 \if@arrowvec
-\else
-\renewcommand{\vec}[1]{\mathbf{\boldsymbol#1}}
+    \renewcommand{\@hsrvecf}[1]{\hsrvecarrow{#1}}
 \fi
+
+% save previous command
+\newcommand{\vaccent}{\v}
+\newcommand{\oldvec}{\vec}
+% redefine
+\renewcommand{\v}[1]{\@hsrvecf{#1}}
+\renewcommand{\vec}[1]{\@hsrvecf{#1}}
 %    \end{macrocode}
 %    \end{macro}
 
-%    \begin{macro}{\uvec}
-%    Unit vector notation. Takes \marg{letter}.
-%    \begin{example}{\[\uvec{x} = \vec{x}/x\]}
+%    \begin{macro}{\uvec, \uv}
+%    Unit vector notation. Takes \marg{letter}. It is implemented in terms of
+%    \cmd{\vec}, which means that the style is inherited.
+%    \begin{example}{\[
+%        \hsruvecbold{x} = \hsrvecbold{x}/x 
+%        \qquad
+%        \hsruvecarrow{x} = \hsrvecarrow{x}/x
+%    \]}
 %        |\uvec{x} = \vec{x}/x|
 %    \end{example}
 %
 %    \begin{macrocode}
-\newcommand{\uvec}[1]{\mathrm{\vec{\hat{#1}}}}
+\newcommand{\hsruvecbold}[1]{\vec{\hat{#1}}}
+\newcommand{\hsruvecarrow}[1]{\hat{\mathrm{#1}}}
+\newcommand{\@hsruvecf}[1]{\hsruvecbold{#1}}
+\if@arrowvec
+    \renewcommand{\@hsruvecf}[1]{\hsruvecarrow{#1}}
+\fi
+
+\newcommand{\uv}[1]{\@hsruvecf{#1}}
+\newcommand{\uvec}[1]{\@hsruvecf{#1}}
 %    \end{macrocode}
 %    \end{macro}
+
+%    \begin{macro}{\dotp}
+%    Dot product between vectors.
+%    \begin{example}{\[
+%       \vec{u}\dotp\vec{v}
+%    \]}
+%       |\vec{u}\dotp\vec{v}|
+%    \end{example}
+%
+%    \subsubsection{Products}
+%
+%    \begin{macrocode}
+\newcommand{\dotp}{\boldsymbol\cdot}
+%    \end{macrocode}
+%    \end{macro}
+
+%    \begin{macro}{\crossp, \cross}
+%    Cross product between vectors.
+%    \begin{example}{\[
+%       \vec{u}\cross\vec{v}
+%    \]}
+%       |\vec{u}\cross\vec{v}|
+%    \end{example}
+%
+%    \begin{macrocode}
+\newcommand{\crossp}{\boldsymbol\times}
+\newcommand{\cross}{\boldsymbol\times}
+%    \end{macrocode}
+%    \end{macro}
+
+
+
+%    \subsection{Matrices and Tensors}
 
 %    \begin{macro}{\mtx}
 %    Matrix notation. Takes \marg{letter}.
@@ -223,10 +296,11 @@
 %    \end{macro}
 
 %    \subsection{Derivatives}
+%    \subsubsection{Differentials}
 
 %    \begin{macro}{\dd}
 %    The differential element. It needs a \marg{var} and has the optional 
-%    argument \oarg{exponent}.
+%    argument \oarg{order}.
 %    \begin{example}{\[\dd{x}\qquad\dd[4]{x}\]}|\dd{x} \dd[4]{x}|\end{example}
 %    
 %    \begin{macrocode}
@@ -238,19 +312,21 @@
 %    This is the same as \cs{dd} but with a small space in front, it is 
 %    intended to be used in integrals for a nicer typesetting.
 %    \begin{example}{\begin{align*}
-%        I &= \int \vec{J}\cdot\dd{\vec{s}} \\
-%          &= \iint \vec{J}\cdot\uvec{n}\di{x}\di{y}
+%        I &= \int \vec{J}\dotp\dd{\vec{s}} \\
+%          &= \iint \vec{J}\dotp\uvec{n}\di{x}\di{y}
 %    \end{align*}}
-%        |% no spacing needed (because of cdot)| \\
-%        |I = \int\vec{J}\cdot\di{\vec{s}}     | \\
-%        |% needs spacing                      | \\
-%        |  = \iint\vec{J}\cdot\uvec{n}\di{x}\di{y} |
+%        |% no spacing needed (because of dotp)| \\
+%        |I = \int\vec{J}\dotp\dd{\vec{s}}     | \\
+%        |% needs spacing between dx and dy    | \\
+%        |  = \iint\vec{J}\dotp\uvec{n}\di{x}\di{y} |
 %    \end{example}
 % 
 %    \begin{macrocode}
 \newcommand{\di}[2][]{\,\dd[#1]{#2}}
 %    \end{macrocode}
 %    \end{macro}
+
+%    \subsubsection{Classical}
 
 %    \begin{macro}{\deriv}
 %    The derivative has arguments \marg{function}, \marg{var} and the optional 
@@ -265,6 +341,7 @@
 %    \end{macrocode}
 %    \end{macro}
 
+%    ^^A TODO: add mixed partial derivatives (probably using xparse)
 %    \begin{macro}{\pderiv}
 %    The partial derivative has arguments \marg{function}, \marg{var} and the 
 %    optional argument \oarg{order}.
@@ -277,6 +354,9 @@
 \newcommand{\pderiv}[3][]{\frac{\partial^{#1} #2}{\partial #3^{#1}}}
 %    \end{macrocode}
 %    \end{macro}
+
+
+%    \subsubsection{Vector}
 
 %    \begin{macro}{\grad}
 %    The gradient operator.
@@ -332,6 +412,9 @@
 %    \end{macrocode}
 %    \end{macro}
 
+
+%    \DisableCrossrefs
+
 %    \section{Colors}
 %    \begin{center}
 %    \begin{tikzpicture}
@@ -355,13 +438,12 @@
 
 %    \StopEventually{^^A
 %       \PrintChanges
-%       \PrintIndex
+%%^^A\PrintIndex
 %
-%       \section{License}
+%       \section*{License}
 %       \doclicenseThis
 %   }
 %
-%    \DisableCrossrefs
 %    \begin{macrocode}
 \definecolor{hsr-blue}{HTML}{0065A3}
 \definecolor{hsr-blue80}{HTML}{3384B5}
@@ -411,7 +493,6 @@
 \definecolor{hsr-black40}{HTML}{A4A2A4}
 \definecolor{hsr-black20}{HTML}{D1D1D1}
 %    \end{macrocode}
-%    \EnableCrossrefs
 
 %    \iffalse
 %    \begin{macrocode}

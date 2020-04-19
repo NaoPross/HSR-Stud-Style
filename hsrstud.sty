@@ -26,10 +26,14 @@
 
 \RequirePackage{amsmath}
 \RequirePackage{amssymb}
-\RequirePackage{esint}
 \RequirePackage{bm}
 
+\RequirePackage{esint}
+\RequirePackage[b]{esvect}
+
 \RequirePackage{xcolor}
+
+
 
 
 
@@ -43,12 +47,34 @@
 \ProcessOptions\relax
 
 
+
+\newcommand{\hsrvecbold}[1]{\mathbf{\boldsymbol{#1}}}
+\newcommand{\hsrvecarrow}[1]{\vv{\mathrm{#1}}} % from esvect
+\newcommand{\@hsrvecf}[1]{\hsrvecbold{#1}}
 \if@arrowvec
-\else
-\renewcommand{\vec}[1]{\mathbf{\boldsymbol#1}}
+    \renewcommand{\@hsrvecf}[1]{\hsrvecarrow{#1}}
 \fi
 
-\newcommand{\uvec}[1]{\mathrm{\vec{\hat{#1}}}}
+\newcommand{\vaccent}{\v}
+\newcommand{\oldvec}{\vec}
+\renewcommand{\v}[1]{\@hsrvecf{#1}}
+\renewcommand{\vec}[1]{\@hsrvecf{#1}}
+
+\newcommand{\hsruvecbold}[1]{\vec{\hat{#1}}}
+\newcommand{\hsruvecarrow}[1]{\hat{\mathrm{#1}}}
+\newcommand{\@hsruvecf}[1]{\hsruvecbold{#1}}
+\if@arrowvec
+    \renewcommand{\@hsruvecf}[1]{\hsruvecarrow{#1}}
+\fi
+
+\newcommand{\uv}[1]{\@hsruvecf{#1}}
+\newcommand{\uvec}[1]{\@hsruvecf{#1}}
+
+\newcommand{\dotp}{\boldsymbol\cdot}
+
+\newcommand{\crossp}{\boldsymbol\times}
+\newcommand{\cross}{\boldsymbol\times}
+
 
 \newcommand{\mtx}[1]{\mathrm{#1}}
 
@@ -63,9 +89,11 @@
 
 \newcommand{\di}[2][]{\,\dd[#1]{#2}}
 
+
 \newcommand{\deriv}[3][]{\frac{\dd[#1]{#2}}{\dd[]{#3^{#1}}}}
 
 \newcommand{\pderiv}[3][]{\frac{\partial^{#1} #2}{\partial #3^{#1}}}
+
 
 \if@textvecdiff
     \newcommand{\grad}{\text{grad }}
@@ -93,6 +121,8 @@
 \fi
 
 
+
+%%^^A\PrintIndex
 \definecolor{hsr-blue}{HTML}{0065A3}
 \definecolor{hsr-blue80}{HTML}{3384B5}
 \definecolor{hsr-blue60}{HTML}{66A3C8}
