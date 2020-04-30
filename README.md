@@ -6,6 +6,13 @@
   - [X] Dervivatives with Del notation
   - [ ] Document Formatting related (could be moved into a document class)
     - [ ] Use 'hsr standard' header
+  - [ ] Premade feature sets for modules
+    - [ ] Analysis
+    - [ ] Linear Algebra
+    - [ ] Physics
+    - [ ] Computer Science
+    - [ ] Electrical Engineering
+    - [ ] English
 - [X] Notation Macros
   - [X] Vectors, Matrices and Tensors
   - [X] Equalities
