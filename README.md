@@ -2,6 +2,7 @@
 
 ## TODO
 - [ ] Options
+  - [ ] Keyval options
   - [X] Vectors with arrows
   - [X] Dervivatives with Del notation
   - [ ] Document Formatting related (could be moved into a document class)
