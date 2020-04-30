@@ -3,23 +3,26 @@
 ## TODO
 - [ ] Options
   - [ ] Keyval options
-  - [X] Vectors with arrows
-  - [X] Dervivatives with Del notation
+  - [ ] `donotrenew` don't rename predefined LaTeX commands and environments
+  - [X] `arrowvec` vectors with arrows
+  - [X] `textvecdiff` vector dervivatives without Del notation
   - [ ] Document Formatting related (could be moved into a document class)
-    - [ ] Use 'hsr standard' header
-  - [ ] Premade feature sets for modules
-    - [ ] Analysis
-    - [ ] Linear Algebra
-    - [ ] Physics
-    - [ ] Computer Science
-    - [ ] Electrical Engineering
-    - [ ] English
+    - [ ] `header` for 'hsr standard' header
+    - [ ] `margins`, `smallmargins` for reasonable margins
+  - [ ] `module=<X>` Premade feature sets for modules
+    - [ ] `an` Analysis
+    - [ ] `linalg` Linear Algebra
+    - [ ] `ph` Physics
+    - [ ] `cs` or `it` Computer Science
+    - [ ] `ee`or `et` Electrical Engineering
+    - [ ] `eng` English
 - [X] Notation Macros
   - [X] Vectors, Matrices and Tensors
   - [X] Equalities
   - [X] Derivatives and vector operators
 - [X] HSR Colors
 - [ ] Document classes
+  - [ ] Essay
   - [ ] Summary
   - [ ] Long summary
 - [ ] Documentation on how to contribute
