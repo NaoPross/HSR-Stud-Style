@@ -38,12 +38,13 @@
 %<*doc>
 \documentclass[a4paper]{ltxdoc}
 
-\usepackage{\jobname}
 
 %% https://tex.stackexchange.com/questions/95882/avoid-multicol-error-error-saving-partial-page
 %% \setlength\IndexMin{100pt}
 
 \usepackage[left=4cm, right=4cm, top=3cm, bottom=3cm]{geometry}
+
+\usepackage{\jobname}
 
 \usepackage{fancyvrb}
 \usepackage{enumitem}
@@ -124,10 +125,14 @@ The following packages are automatically loaded and do not need to be set up.
 
 \section{Package Options} \label{sec:options}
 \begin{description}[align=right]
-   \item[\texttt{arrowvec}] Tells the package to use a vector notation 
+   \item[|dontrenew|] Do not renew existing \LaTeX{} commands and  
+   environments. This is useful when the package is loaded on a document that 
+   is already partiall written.
+
+   \item[|arrowvec|] Tells the package to use a vector notation 
    with a small arrow over the variables, as it were handwritten.
 
-   \item[\texttt{textvecdiff}] Disables the ``Nabla'' or ``Del'' notation 
+   \item[|textvecdiff|] Disables the ``Nabla'' or ``Del'' notation 
    for vector derivatives. Instead the symbols
    \(\nabla, \nabla \cdot, \nabla \times, \nabla^2\) are be replaced with 
    grad, div, curl and div grad.
@@ -155,11 +160,12 @@ int main(int argc, char *argv[], char *envp[]) {
 \section{Mathematics}
 \subsection{Vectors}
 
-\begin{macro}{\vec, \v}
+\begin{macro}{\vec, \v, \vc}
 Vectors notation. If the option \texttt{arrowvec} described in \S 
 \ref{sec:options} is enabled, the notation with a small arrow over the 
 varible will be used \(\hsrvecarrow{x}\), otherwise the vector is bold
-\(\hsrvecbold{x}\). Takes one option \marg{letter}.
+\(\hsrvecbold{x}\). Takes one option \marg{letter}. \cs{v} is renamed to 
+\cs{vaccent} and \cs{vec} to \cs{oldvec}.
 \begin{example}
 \[ \vec{F} = m\vec{a} \]
 \end{example}
@@ -363,23 +369,40 @@ The laplace operator.
 \RequirePackage{xcolor}
 \RequirePackage{hyperref}
 \RequirePackage{listings}
+
+\RequirePackage{iftex}
+\RequirePackage{kvoptions}
 %% ))
 %    \end{macrocode}
 
 %    \subsection{Package options}
 %    \begin{macrocode}
-\newif\if@arrowvec\@arrowvecfalse
-\DeclareOption{arrowvec}{\@arrowvectrue}
+\SetupKeyvalOptions{
+    family=hsr,
+    prefix=hsr@
+}
 
-\newif\if@textvecdiff\@textvecdifffalse
-\DeclareOption{textvecdiff}{\@textvecdifftrue}
+%% Do not renew LaTeX Macros
+\DeclareBoolOption[false]{dontrenew}
 
-\ProcessOptions\relax
+%% Vector style
+\DeclareBoolOption[false]{arrowvec}
+\DeclareComplementaryOption{boldvec}{arrowvec}
+
+%% Vector derivative style
+\DeclareBoolOption[false]{textvecdiff}
+\DeclareComplementaryOption{delvecdiff}{textvecdiff}
+
+
+%% Process options
+\ProcessLocalKeyvalOptions*
 %    \end{macrocode}
-
 
 %    \subsection{Default theming}
 %    \begin{macrocode}
+%% Setup geometry ((
+%% ))
+
 %% Theming for hyperref and listings ((
 \hypersetup{
     colorlinks=true,
@@ -430,24 +453,29 @@ The laplace operator.
 %% Vector ((
 \newcommand{\hsrvecbold}[1]{\mathbf{\boldsymbol{#1}}}
 \newcommand{\hsrvecarrow}[1]{\vv{\mathrm{#1}}} % from esvect
+
 \newcommand{\@hsrvecf}[1]{\hsrvecbold{#1}}
-\if@arrowvec
+\ifhsr@arrowvec
     \renewcommand{\@hsrvecf}[1]{\hsrvecarrow{#1}}
 \fi
 
-% save previous command
-\newcommand{\vaccent}{\v}
-\newcommand{\oldvec}{\vec}
-% redefine
-\renewcommand{\v}[1]{\@hsrvecf{#1}}
-\renewcommand{\vec}[1]{\@hsrvecf{#1}}
+\ifhsr@dontrenew
+    \newcommand{\vc}{\@hsrvecf}
+\else
+    % save previous command
+    \newcommand{\vaccent}{\v}
+    \newcommand{\oldvec}{\vec}
+    % redefine
+    \renewcommand{\v}[1]{\@hsrvecf{#1}}
+    \renewcommand{\vec}[1]{\@hsrvecf{#1}}
+\fi
 %%))
 
 %% Unit vector ((
 \newcommand{\hsruvecbold}[1]{\vec{\hat{#1}}}
 \newcommand{\hsruvecarrow}[1]{\hat{\mathrm{#1}}}
 \newcommand{\@hsruvecf}[1]{\hsruvecbold{#1}}
-\if@arrowvec
+\ifhsr@arrowvec
     \renewcommand{\@hsruvecf}[1]{\hsruvecarrow{#1}}
 \fi
 
@@ -488,30 +516,43 @@ The laplace operator.
 
 %    \subsubsection{Vector derivatives}
 %    \begin{macrocode}
-\if@textvecdiff
+%% Gradient ((
+\ifhsr@textvecdiff
     \newcommand{\grad}{\text{grad }}
 \else
     \newcommand{\grad}{\nabla}%
 \fi
+%% ))
 
-\let\divsymb=\div 
-\if@textvecdiff
-    \renewcommand{\div}{\text{div}}
+%% Divergence ((
+\ifhsr@textvecdiff
+    \newcommand{\@hsrdivf}{\text{div }}
 \else
-    \renewcommand{\div}{\nabla\cdot}
+    \newcommand{\@hsrdivf}{\nabla\cdot}
 \fi
+\ifhsr@dontrenew
+    \newcommand{\divg}{\@hsrdivf}
+\else
+    \let\divsymb=\div
+    \renewcommand{\div}{\@hsrdivf}
+\fi
+%% ))
 
-\if@textvecdiff
+%% Curl ((
+\ifhsr@textvecdiff
     \newcommand{\curl}{\text{curl }}
 \else
     \newcommand{\curl}{\nabla\times}
 \fi
+%% ))
 
-\if@textvecdiff
-    \newcommand{\laplace}{\text{div grad}}
+%% laplacian ((
+\ifhsr@textvecdiff
+    \newcommand{\laplace}{\text{div grad }}
 \else
     \newcommand{\laplace}{\nabla^2}
 \fi
+%% ))
 %    \end{macrocode}
 
 %    \subsection{Colors}
