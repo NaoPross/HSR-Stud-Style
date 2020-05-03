@@ -20,10 +20,17 @@
 %% original source files, as listed above, are part of the
 %% same distribution. (The sources need not necessarily be
 %% in the same archive or directory.)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{hsrstud}[2020/04/16 v0.1 HSR-Stud Macros]
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 %% Dependencies ((
@@ -62,8 +69,10 @@
 %% Process options
 \ProcessLocalKeyvalOptions*
 
-%% Setup geometry ((
-%% ))
+%% TODO: change letters in german
+\newcommand{\bookref}[1]{\texttt{\textcolor{hsr-mauve}{P.#1}}}
+\newcommand{\notesref}[1]{\texttt{\textcolor{hsr-blue}{S.#1}}}
+\newcommand{\lectureref}[1]{\texttt{\textcolor{hsr-lakegreen}{L.#1}}}
 
 %% Theming for hyperref and listings ((
 \hypersetup{

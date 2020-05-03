@@ -1,4 +1,8 @@
 % \iffalse meta-comment
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Internals for extraction
+%
 %<*internal>
 \def\nameofplainTeX{plain}
 \ifx\fmtname\nameofplainTeX\else
@@ -28,14 +32,21 @@
 \fi
 %</internal>
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Headers
 
 %<*package>
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{hsrstud}[2020/04/16 v0.1 HSR-Stud Macros]
 %</package>
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Documentation 
 
 %<*doc>
+% 
+% Documentation for the HSR-Stud package
+%
 \documentclass[a4paper]{ltxdoc}
 
 
@@ -117,11 +128,12 @@
 \changes{v0.1}{2020/02/16}{Initial Draft}
 
 \section{Purpose of this package}
-This package is made for the HSR Studenten organization to provide a 
-consistent style and source syntax across documents.
+This package is made for the HSR Studenten organization to provide an easy to 
+use interface to give a more consistent look and feel for the works produced by 
+its the members. A secondary objective of this package is to eliminate the
+\emph{many} dispersed duplicate .tex files that fill the repositories of the 
+HSR-Stud org.
 
-\section{Dependencies}
-The following packages are automatically loaded and do not need to be set up.
 
 \section{Package Options} \label{sec:options}
 \begin{description}[align=right]
@@ -137,6 +149,8 @@ The following packages are automatically loaded and do not need to be set up.
    \(\nabla, \nabla \cdot, \nabla \times, \nabla^2\) are be replaced with 
    grad, div, curl and div grad.
 \end{description}
+
+\section{Summary notation}
 
 \section{Default Theming}
 \subsection{Links with \texttt{hyperref}}
@@ -333,22 +347,25 @@ The laplace operator.
 \end{tikzpicture}
 \end{center}
 
-\DocInput{\jobname.dtx}
-
-\begin{thebibliography}{3}
-    \bibitem{bib:hsrcolors}
-        HSR Intern: Corporate Design / Farben,
-        \textit{Hochschule f\"ur Technik Rapperswil},
-        \url{https://intranet.hsr.ch/Farben.7715.0.html}
-\end{thebibliography}
-
-\section*{License}
+\section{License}
 \doclicenseThis
+
+% \begin{thebibliography}{3}
+%     \bibitem{bib:hsrcolors}
+%         HSR Intern: Corporate Design / Farben,
+%         \textit{Hochschule f\"ur Technik Rapperswil},
+%         \url{https://intranet.hsr.ch/Farben.7715.0.html}
+% \end{thebibliography}
+
+\DocInput{\jobname.dtx}
 
 \end{document}
 
 %</doc>
 %\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% hsrstud package implementation with inline documentation
 
 %\iffalse
 %<*package>
@@ -398,11 +415,17 @@ The laplace operator.
 \ProcessLocalKeyvalOptions*
 %    \end{macrocode}
 
+
+%    \subsection{Summary notation}
+%    \begin{macrocode}
+%% TODO: change letters in german
+\newcommand{\bookref}[1]{\texttt{\textcolor{hsr-mauve}{P.#1}}}
+\newcommand{\notesref}[1]{\texttt{\textcolor{hsr-blue}{S.#1}}}
+\newcommand{\lectureref}[1]{\texttt{\textcolor{hsr-lakegreen}{L.#1}}}
+%    \end{macrocode}
+
 %    \subsection{Default theming}
 %    \begin{macrocode}
-%% Setup geometry ((
-%% ))
-
 %% Theming for hyperref and listings ((
 \hypersetup{
     colorlinks=true,
