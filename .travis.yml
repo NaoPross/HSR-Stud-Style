@@ -1,0 +1,20 @@
+language: generic
+dist: bionic
+env:
+  global:
+    - TEX_MAIN=hsrstud.dtx
+
+install:
+  - source .travis/texlive/texlive_install.sh
+
+cache:
+  directories:
+    - /tmp/texlive
+    - $HOME/.texlive
+
+before_script: cd $TRAVIS_BUILD_DIR/
+script:
+  # texliveonfly will download packages automatically
+  - texliveonfly --compiler=xelatex --arguments="-shell-escape" --terminal_only $TEX_MAIN
+  # latexmk will automatically handle bibtex and references
+  - latexmk -pdf -xelatex $TEX_MAIN
