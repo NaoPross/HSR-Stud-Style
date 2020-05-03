@@ -14,7 +14,7 @@ cache:
 
 before_script: cd $TRAVIS_BUILD_DIR/
 script:
-  # texliveonfly will download packages automatically
+  # texliveonfly will try to download packages automatically
   - texliveonfly --compiler=xelatex --arguments="-shell-escape" --terminal_only $TEX_MAIN
   # latexmk will automatically handle bibtex and references
   - latexmk -pdf -xelatex $TEX_MAIN
