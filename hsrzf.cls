@@ -19,6 +19,9 @@
 %% Quicker compilation and little changes
 % \DeclareBoolOption[false]{draft}
 
+%% Quicker compilation and little changes
+% \DeclareBoolOption[false]{twocolumn}
+
 %% Use header and footer
 \DeclareBoolOption[false]{header}
 \DeclareComplementaryOption{noheader}{header}
@@ -30,8 +33,8 @@
 %% Configures the geometry package
 %% 
 %% Possible values:
-%%  - huge    (50mm, 40mm)
-%%  - large   (40mm, 30mm)
+%%  - huge    (45mm, 40mm)
+%%  - large   (35mm, 35mm)
 %%  - big     (30mm, 30mm)
 %%  - normal  (25mm, 30mm)
 %%  - small   (20mm, 30mm)
@@ -42,35 +45,56 @@
 %% Configures the polyglossia package
 % \DeclareStringOption[]{lang}[german]
 
+
+%% Pass other options to the class
+\DeclareDefaultOption{%
+	\ifx\CurrentOptionValue\relax
+		\PackageWarningNoLine{\@currname}{%
+			Unknown option ``\CurrentOption''\MessageBreak
+			is passed to package ``color''%
+		}%
+		% Pass the option to package color.
+		% Again it is better to expand \CurrentOption.
+		\expandafter\PassOptionsToClass
+			\expandafter{\CurrentOption}{article}
+	\else
+		% Package color does not take options with values.
+		% We provide the standard LaTeX error.
+		\@unknownoptionerror
+	\fi
+}
+
 \ProcessKeyvalOptions{hsrzf}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Setup Class
-\PassOptionsToClass{a4paper}{article}
-\LoadClassWithOptions{article}
+\LoadClass[a4paper]{article}
 
 %% Style deps
 \RequirePackage{geometry}
 \RequirePackage{fancyhdr}
 \RequirePackage{titling}
 
-
-
+%% Insert metadata in the pdf
 \PassOptionsToPackage{plainpages=false, pdfpagelabels, pdfusetitle}{hyperref}
 \RequirePackage{hyperref}
 
-%% Create new fields
+%% Create new metadata fields
+\newcommand{\hsr@course}{Magic}
+\newcommand{\hsr@module}{Ma1}
 \newcommand{\hsr@semester}{FS00}
-\newcommand{\hsr@subject}{Magic}
-\newcommand{\hsr@authoremail}{noname@hsr.ch}
+\newcommand{\hsr@institute}{Evil}
 
+%% TODO
 % \newcommand[1]{\subject}{\renewcommand{\hsr@subject}{#1}}
 % \newcommand[1]{\semester}{\renewcommand{\hsr@semester}{#1}} %% TODO: add season option
 % \newcommand[1]{\email}{\expandafter\renewcommand\hsr@authoremail{#1}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Setup Style Packages
+
+%% TODO: fix title
 
 %% Configure Sans-Serif font
 \ifhsrzf@sans
@@ -94,11 +118,11 @@
     \setlength\hsr@hmarginswidth{30mm}
 \else
     \expandafter\ifstrequal\expandafter{\hsrzf@margin}{huge}{
-        \setlength\hsr@hmarginswidth{50mm}
+        \setlength\hsr@hmarginswidth{45mm}
         \setlength\hsr@vmarginsheight{40mm}}{}
     \expandafter\ifstrequal\expandafter{\hsrzf@margin}{large}{
-        \setlength\hsr@hmarginswidth{40mm}
-        \setlength\hsr@vmarginsheight{30mm}}{}
+        \setlength\hsr@hmarginswidth{35mm}
+        \setlength\hsr@vmarginsheight{35mm}}{}
     \expandafter\ifstrequal\expandafter{\hsrzf@margin}{big}{
         \setlength\hsr@hmarginswidth{30mm}
         \setlength\hsr@vmarginsheight{30mm}}{}
