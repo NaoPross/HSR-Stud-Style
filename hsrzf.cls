@@ -85,6 +85,7 @@
 \newcommand{\hsr@module}{Ma1}
 \newcommand{\hsr@semester}{FS00}
 \newcommand{\hsr@institute}{Evil}
+\newcommand{\hsr@contributors}{}
 
 %% TODO
 % \newcommand[1]{\subject}{\renewcommand{\hsr@subject}{#1}}
