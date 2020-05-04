@@ -23,6 +23,7 @@ amsthm
 appendix
 array
 arydshln
+beton
 bibtex		
 biblatex		
 biblatex-ieee	
@@ -33,14 +34,20 @@ booktabs
 cancel
 caption
 ccicons
+ccfonts
 centernot
 changepage	
 circuitikz	
+cm-super
 collectbox
+concmath
+concmath-fonts
+concrete
 courier
 csquotes		
 doclicense
 ec
+ecc
 enumerate
 enumitem
 environ		
@@ -112,6 +119,7 @@ textcomp
 thmtools
 tikz
 titlesec
+titling
 tocloft		
 todonotes		
 tcolorbox		
