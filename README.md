@@ -1,4 +1,4 @@
-# HSR-Stud LaTeX Style & Macros
+# HSR-Stud LaTeX Style & Macros [![Build Status](https://travis-ci.org/NaoPross/HSR-Stud-Style.svg?branch=master)](https://travis-ci.org/NaoPross/HSR-Stud-Style)
 
 ## TODO
 - [ ] Options
