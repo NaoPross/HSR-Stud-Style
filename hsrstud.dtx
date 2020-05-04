@@ -1,38 +1,6 @@
 % \iffalse meta-comment
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Internals for extraction
-%
-%<*internal>
-\def\nameofplainTeX{plain}
-\ifx\fmtname\nameofplainTeX\else
-  \expandafter\begingroup
-\fi
-%</internal>
-%<*install>
-\input docstrip.tex
-\keepsilent
-\askforoverwritefalse
-\usedir{tex/latex/hsrstud}
-\generate{
-  \file{\jobname.sty}{\from{\jobname.dtx}{package}}
-}
-%</install>
-%<install>\endbatchfile
-%<*internal>
-\usedir{source/latex/hsrstud}
-\generate{
-  \file{\jobname.ins}{\from{\jobname.dtx}{install}}
-}
-\nopreamble\nopostamble
-\ifx\fmtname\nameofplainTeX
-  \expandafter\endbatchfile
-\else
-  \expandafter\endgroup
-\fi
-%</internal>
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Headers
 
 %<*package>
@@ -744,7 +712,7 @@ The laplace operator.
 \colorlet{HSRBasswood20}{hsr-basswood20}
 %% ))
 
-\fi
+\fi %% ifhsr@legacy
 %    \end{macrocode}
 
 %    \iffalse
