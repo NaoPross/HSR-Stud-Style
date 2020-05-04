@@ -1,33 +1,37 @@
 # HSR-Stud LaTeX Style & Macros [![Build Status](https://travis-ci.org/NaoPross/HSR-Stud-Style.svg?branch=master)](https://travis-ci.org/NaoPross/HSR-Stud-Style)
 
 ## TODO
-- [ ] Options
-  - [ ] Keyval options
-  - [ ] `donotrenew` don't rename predefined LaTeX commands and environments
-  - [X] `arrowvec` vectors with arrows
-  - [X] `textvecdiff` vector dervivatives without Del notation
-  - [ ] Document Formatting related (could be moved into a document class)
-    - [ ] `header` for 'hsr standard' header
-    - [ ] `margins`, `smallmargins` for reasonable margins
-  - [ ] `module=<X>` Premade feature sets for modules
-    - [ ] `an` Analysis
-    - [ ] `linalg` Linear Algebra
-    - [ ] `ph` Physics
-    - [ ] `cs` or `it` Computer Science
-    - [ ] `ee`or `et` Electrical Engineering
-    - [ ] `eng` English
-- [X] Notation Macros
-  - [X] Vectors, Matrices and Tensors
-  - [X] Equalities
-  - [X] Derivatives and vector operators
-- [X] HSR Colors
+- [ ] `hsrstud` package
+  - [ ] Options
+    - [X] Keyval options
+    - [X] `donotrenew` don't rename predefined LaTeX commands and environments
+    - [X] `arrowvec` vectors with arrows
+    - [X] `textvecdiff` vector dervivatives without Del notation
+    - [X] `legacy` backwards compatibility with HSR-Stud/header etc.
+    - [ ] `module=<X>` Premade feature sets for modules
+      - [ ] `an` Analysis
+      - [ ] `linalg` Linear Algebra
+      - [ ] `ph` Physics
+      - [ ] `cs` or `it` Computer Science
+      - [ ] `ee`or `et` Electrical Engineering
+      - [ ] `eng` English
+  - [X] Notation Macros
+    - [X] Vectors, Matrices and Tensors
+    - [X] Equalities
+    - [X] Derivatives and vector operators
+  - [X] HSR Colors
+  - [ ] Legacy support
+    - [ ] Formelbuch macros
+    - [ ] Legacy colors
 - [ ] Document classes
-  - [ ] Essay
-  - [ ] Summary
+  - [ ] Essay 
+  - [ ] Summary `hsrzf`
   - [ ] Long summary
+  - [ ] Report `hsrbericht`
 - [ ] Documentation on how to contribute
   - [ ] Add a new macro
   - [ ] Add a new env
+  - [ ] Update a documentclass
 - [ ] More options (suggestions?)
 
 ## Compile
