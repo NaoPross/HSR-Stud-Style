@@ -8,60 +8,81 @@
     - [X] `arrowvec` vectors with arrows
     - [X] `textvecdiff` vector dervivatives without Del notation
     - [X] `legacy` backwards compatibility with HSR-Stud/header etc.
-    - [ ] `module=<X>` Premade feature sets for modules
-      - [ ] `an` Analysis
-      - [ ] `linalg` Linear Algebra
-      - [ ] `ph` Physics
-      - [ ] `cs` or `it` Computer Science
-      - [ ] `ee`or `et` Electrical Engineering
-      - [ ] `eng` English
-  - [X] Notation Macros
+    - [ ] `ost` use the new OST theme and colors
+  - [X] Macros
     - [X] Vectors, Matrices and Tensors
     - [X] Equalities
     - [X] Derivatives and vector operators
+    - [ ] Book and external material references
   - [X] HSR Colors
+  - [ ] OST Colors
   - [ ] Legacy support
     - [ ] Formelbuch macros
-    - [ ] Legacy colors
+    - [X] Legacy color names
 - [ ] Document classes
   - [ ] Essay 
-  - [ ] Summary `hsrzf`
-  - [ ] Long summary
-  - [ ] Report `hsrbericht`
+  - [X] `hsrzf` Summary (Zusammenfassung)
+  - [ ] `hsrbericht` Report (Bericht)
+  - [ ] `hsrsa` Simple thesis (Studentenarbeit)
+  - [ ] `hsrletter` Formal letter
+- [ ] Beamer class support
 - [ ] Documentation on how to contribute
-  - [ ] Add a new macro
+  - [ ] Explaination of the `dtx` file format
+  - [X] Add a new macro
   - [ ] Add a new env
   - [ ] Update a documentclass
 - [ ] More options (suggestions?)
 
 ## Compile
 It is as simple as it gets. 
-This will generate a `hsrstud.sty` file that can be placed in the folder of any other LaTeX project,
-which can access the library with `\usepackage{hsrstud}`
+This will generate many files including `hsrstud.sty` that can be placed in the folder of any other LaTeX project, which can access the library with `\usepackage{hsrstud}`
 ```
-$ xelatex hsrstud.dtx
+$ xelatex hsrstud.ins
 ```
+
+To get the documentation (in PDF) you can compile the respective `dtx` file
+```
+$ xelatex hsrstud.dtx          # package documentation
+$ xelatex hsrstud-classes.dtx  # classes documentation
+``` 
 
 ## Documentation
 The usage of the macros is documented in `hsrstud.pdf`, which is automatically generated when
 the `dtx` file is compiled.
 
-## Contribute (WIP)
-### Add a new macro
+## Contribute
+### Documented LaTeX sources (`dtx`)
+TODO
+
+### Macro code style
+- Macros and environments should be all lowercase.
+- If a macro redefines an existing csname (command), an alternative version should also be present (see `dontrenew` option)
+- Internal variables are prefixed with `\hsr@`, `\hsrstud@` for the package and `\hsrzf@`, `\hsrbericht@` for the classes.
+ 
+### Create a new macro
 ```latex
-%    \begin{macro}{\piggy}
-%    Here I explain what my macro does, for example it takes one optional
-%    argument \oarg{carrot} and a required argument \marg{tomato}
-%
-%    \begin{macrocode}
-\newcommand{\piggy}{%
-    ... your code
+\newcommand[<n>]{\<yourmacro>}{%
+  % implementation
 }
-%    \end{macrocode}
-%    \end{macro}
 ```
+
 ### Add a new option
-### Pitfalls
+Options are created using the `kvoptions` packages. See the package documentation for more advanced uses.
+
+#### Boolean options
+```latex
+\DeclareBoolOption[<default>]{<name>}
+```
+
+And then you can use it
+
+```latex
+% the prefix may be different depending on the file.
+% eg: \ifhsrzf@<name>
+\ifhsr@<name>
+  % do something
+\fi
+```
 
 ## License
 ```
