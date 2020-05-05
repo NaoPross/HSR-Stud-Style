@@ -13,7 +13,8 @@ before_script: cd $TRAVIS_BUILD_DIR/
 script:
   # texliveonfly will try to download packages automatically
   # latexmk will automatically handle bibtex and references
+  - xelatex hsrstud.ins
   - texliveonfly --compiler=xelatex --arguments="-shell-escape" --terminal_only hsrstud.dtx
   - latexmk -pdf -xelatex hsrstud.dtx
-  - texliveonfly --compiler=xelatex --arguments="-shell-escape" --terminal_only hsrstud-classes.tex
-  - latexmk -pdf -xelatex hsrstud-classes.tex
+  - texliveonfly --compiler=xelatex --arguments="-shell-escape" --terminal_only hsrstud-classes.dtx
+  - latexmk -pdf -xelatex hsrstud-classes.dtx

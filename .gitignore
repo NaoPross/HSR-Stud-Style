@@ -1,8 +1,7 @@
 # For this repository
-hsrstud.hd
-
-hsrstud.sty
-hsrzf.sty
+*.hd
+*.sty
+*.cls
 
 # Created by https://www.gitignore.io/api/vim,tex,linux,macos,windows
 # Edit at https://www.gitignore.io/?templates=vim,tex,linux,macos,windows
