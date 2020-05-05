@@ -1,4 +1,4 @@
-# HSR-Stud LaTeX Style & Macros [![Build Status](https://travis-ci.org/NaoPross/HSR-Stud-Style.svg?branch=master)](https://travis-ci.org/NaoPross/HSR-Stud-Style)
+# HSR-Stud LaTeX Style & Macros [![Build Status](https://travis-ci.org/NaoPross/HSRStud-Package.svg?branch=master)](https://travis-ci.org/NaoPross/HSRStud-Package)
 
 ## TODO
 - [ ] `hsrstud` package
