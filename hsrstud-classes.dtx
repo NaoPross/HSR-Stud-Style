@@ -49,8 +49,6 @@
 % \begin{description}[align=right]
 %   \item[\tt sans] Use Sans-Serif fonts.
 %   \item[\tt concrete] Use the ``Concrete Roman'' and ``Concrete Math'' fonts.
-%   \item[\tt header] Use the HSR--Stud standard header. The option 
-%     {\tt noheader} disables the header.
 %   \item[\tt margin=<size>] Sets up margins to reasonable size.
 %   \item[\tt *] Any other given option is passed to the underlying class (article).
 % \end{description}
@@ -83,16 +81,61 @@
 %     \item[\cs{semester}] Semester during which the summarized subject was 
 %         taught. Example: |FS20|
 %     \item[\cs{institute}] Internal institute in which the module was taught. 
-%         This field is optional. Example: |ICOM|
+%         This field is optional.
+%     \item[\cs{authoremail}] Email of the author. This field is optional.
+%     \item[\cs{maintainer}] Name of the person maintaining the work. This 
+%         field is optional.
+%     \item[\cs{contributors}] List of names of those who have contributed to
+%         the document. This field is optional.
 % \end{description}
+% Like \cs{date}, \cs{title}, etc. these fields have too an accessor macro 
+% \cs{the<metadata>}. For example: \cs{thecourse}, \cs{themodule}, and so on.
 % 
 %^^A%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %^^A Zusammenfassung Class Documentation
 % \section{Zusammenfassung \texttt{hsrzf} class}
+% This class is intended to be used to write short summaries.
+%
+% \subsection{Class options}
+% \begin{description}[align=right]
+%   \item[\tt header] Use the HSR--Stud standard header. The option 
+%     {\tt noheader} disables the header.
+% \end{description}
+%
+% \subsection{Minimal working example}
 %
 %^^A%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %^^A Bericht Class Documentation
 % \section{Bericht \texttt{hsrbericht} class}
+% This class tries to conform to the indications given by the communication
+% department of the HSR. The specifications are found in the ``Werkzeugkastens 
+% Technische Berichte''.
+%
+% \subsection{Metadata}
+% In addition to the metadata described in the previous section. This class 
+% requires:
+% \begin{description}[align=right]
+%   \item[\cs{subtitle}] Pretty self explanatory.
+%   \item[\cs{category}] Category assigned to the project.
+%     This field is optional.
+%   \item[\cs{project}] Name or reference to your project.
+%   \item[\cs{topic}] You chosen topic in the category.
+%   \item[\cs{instructor}] Name of the instructor / academic that is 
+%     following or has assigned your work.
+%   \item[\cs{startdate}] Date when you started the project.
+%   \item[\cs{finishdate}] Date when you finished the project (can be set to 
+%     \cs{today} to keep automatically updated.
+%   \item[\cs{address}] Address or place where your work is produced.
+%     This field is optional.
+%   \item[\cs{matriculationnr}] Your matriculation number.
+%   \item[\cs{logo}] Code to insert your logo.
+%   \item[\cs{clientlogo}] Code to insert the logo of the client / research 
+%     department / \dots .
+% \end{description}
+%
+% \subsection{Minimal working example}
+%
+%
 % 
 % \section{License}
 % \doclicenseThis
@@ -215,7 +258,7 @@
 
 %% Project informations
 \newcommand\category[1]{\gdef\hsr@category{#1}}
-\newcommand\hsr@category{\ClassError{hsrbericht}{no \noexpand\category given}{}}
+\newcommand\hsr@category{\ClassWarning{hsrbericht}{no \noexpand\category given}{}}
 \newcommand\thecategory{\hsr@category}
 
 \newcommand\project[1]{\gdef\hsr@project{#1}}
