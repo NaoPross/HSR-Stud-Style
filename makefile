@@ -1,6 +1,6 @@
 TEX := xelatex -shell-escape
 
-.PHONY: all clean
+.PHONY: all test clean
 all: hsrstud.sty hsrstud.pdf hsrzf.cls hsrbericht.cls hsrstud-classes.pdf
 clean:
 	@rm -v \
@@ -27,6 +27,20 @@ clean:
 		hsrstud.toc \
 		hsrstud.vrb \
 		hsrzf.cls \
+		testbericht.aux \
+		testbericht.fdb_latexmk \
+		testbericht.fls \
+		testbericht.log \
+		testbericht.out \
+		testbericht.xdv \
+		testzf.aux \
+		testzf.fdb_latexmk \
+		testzf.fls \
+		testzf.log \
+		testzf.out \
+		testzf.pdf \
+		testzf.xdv \
+		missfont.log \
         2> /dev/null; true
 
 hsrstud.sty hsrzf.cls hsrbericht.cls: hsrstud.ins hsrstud.dtx hsrstud-classes.dtx
@@ -37,3 +51,9 @@ hsrstud.pdf: hsrstud.dtx
 
 hsrstud-classes.pdf: hsrstud-classes.dtx
 	$(TEX) $<
+
+test: hsrstud.sty hsrzf.cls hsrbericht.cls
+	$(TEX) testzf.tex
+	$(TEX) testbericht.tex
+
+# vim: noet :
