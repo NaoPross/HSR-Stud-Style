@@ -6,13 +6,13 @@
 
 \usepackage{hsrstud}
 \usepackage[
-    type={CC},
-    modifier={by-sa},
-    version={4.0},
+  type={CC},
+  modifier={by-sa},
+  version={4.0},
 ]{doclicense}
 \usepackage[
-    margin=3.5cm,
-    left=4cm
+  margin=3.5cm,
+  left=4cm
 ]{geometry}
 
 \usepackage{booktabs}
@@ -47,8 +47,8 @@
 % 
 % \section{Class Options}
 % \begin{description}[align=right]
-%   \item[\tt sans] Use Sans-Serif fonts.
-%   \item[\tt concrete] Use the ``Concrete Roman'' and ``Concrete Math'' fonts.
+%   \item[\tt sans] Use Sans-Serif fonts (|cmbright| and |hfbright|).
+%   \item[\tt slab] Use Slab-Serif fonts (|bitter| and |eulervm|).
 %   \item[\tt margin=<size>] Sets up margins to reasonable size.
 %   \item[\tt *] Any other given option is passed to the underlying class (article).
 % \end{description}
@@ -58,7 +58,7 @@
 %   \toprule
 %   Size & H & V & Size & H & V \\
 %   \midrule
-%   huge    & 45 & 40 & small   & 20 & 30 \\
+%   huge    & 45 & 40 & small   & 20 & 20 \\
 %   large   & 35 & 35 & tiny    & 10 & 20 \\
 %   big     & 30 & 30 & minimal &  5 & 20 \\
 %   normal  & 25 & 30 \\
@@ -74,19 +74,19 @@
 % Additionally, more metadata variables have been created for this class, to 
 % conserve informations related to the university course.
 % \begin{description}[align=right]
-%     \item[\cs{course}] The degree programme of the discussed subject.
-%         Example: |Elektrotechnik|
-%     \item[\cs{module}] Short name of the module according to the class 
-%         schedule. Example: |ComEng1|
-%     \item[\cs{semester}] Semester during which the summarized subject was 
-%         taught. Example: |FS20|
-%     \item[\cs{institute}] Internal institute in which the module was taught. 
-%         This field is optional.
-%     \item[\cs{authoremail}] Email of the author. This field is optional.
-%     \item[\cs{maintainer}] Name of the person maintaining the work. This 
-%         field is optional.
-%     \item[\cs{contributors}] List of names of those who have contributed to
-%         the document. This field is optional.
+%   \item[\cs{course}] The degree programme of the discussed subject.
+%     Example: |Elektrotechnik|
+%   \item[\cs{module}] Short name of the module according to the class 
+%     schedule. Example: |ComEng1|
+%   \item[\cs{semester}] Semester during which the summarized subject was 
+%     taught. Example: |FS20|
+%   \item[\cs{institute}] Internal institute in which the module was taught. 
+%     This field is optional.
+%   \item[\cs{authoremail}] Email of the author. This field is optional.
+%   \item[\cs{maintainer}] Name of the person maintaining the work. This 
+%     field is optional.
+%   \item[\cs{contributors}] List of names of those who have contributed to
+%     the document. This field is optional.
 % \end{description}
 % Like \cs{date}, \cs{title}, etc. these fields have too an accessor macro 
 % \cs{the<metadata>}. For example: \cs{thecourse}, \cs{themodule}, and so on.
@@ -167,8 +167,8 @@
 
 %% Class options
 \SetupKeyvalOptions{
-    family=hsrzf,
-    prefix=hsrzf@
+  family=hsrzf,
+  prefix=hsrzf@
 }
 
 %% Use header and footer
@@ -177,6 +177,9 @@
 
 %% Use a sans-serif font
 \DeclareBoolOption[false]{sans}
+\DeclareBoolOption[false]{slab}
+
+% secret option :)
 \DeclareBoolOption[false]{concrete}
 
 %% Configures the geometry package
@@ -186,7 +189,7 @@
 %%  - large   (35mm, 35mm)
 %%  - big     (30mm, 30mm)
 %%  - normal  (25mm, 30mm)
-%%  - small   (20mm, 30mm)
+%%  - small   (20mm, 20mm)
 %%  - tiny    (10mm, 20mm)
 %%  - minimal ( 5mm, 20mm)
 \DeclareStringOption{margin}[huge]
@@ -197,20 +200,20 @@
 
 %% Pass other options to the class
 \DeclareDefaultOption{%
-    \ifx\CurrentOptionValue\relax
-        \PackageWarningNoLine{\@currname}{%
-            Unknown option ``\CurrentOption''\MessageBreak
-            is passed to class ``article''%
-        }%
-        % Pass the option to package color.
-        % Again it is better to expand \CurrentOption.
-        \expandafter\PassOptionsToClass
-            \expandafter{\CurrentOption}{article}
-    \else
-        % Package color does not take options with values.
-        % We provide the standard LaTeX error.
-        \@unknownoptionerror
-    \fi
+  \ifx\CurrentOptionValue\relax
+    \PackageWarningNoLine{\@currname}{%
+      Unknown option ``\CurrentOption''\MessageBreak
+      is passed to class ``article''%
+    }%
+    % Pass the option to package color.
+    % Again it is better to expand \CurrentOption.
+    \expandafter\PassOptionsToClass
+      \expandafter{\CurrentOption}{article}
+  \else
+    % Package color does not take options with values.
+    % We provide the standard LaTeX error.
+    \@unknownoptionerror
+  \fi
 }
 
 \ProcessKeyvalOptions{hsrzf}
@@ -327,15 +330,56 @@
 
 %% Configure Sans-Serif font
 \ifhsrzf@sans
-\renewcommand{\familydefault}{\sfdefault}
+  \ifhsrzf@slab
+    \PackageError{hsrzf}{%
+      sans ans slab options cannot be used at the same time
+    }
+  \fi
+  \ifhsrzf@concrete{hsrzf}{%
+    sans and concrete options cannot be used at the same time
+  }
+  \fi
+
+  \PassOptionsToPackage{T1}{fontenc}
+  \RequirePackage{fontenc}
+  \RequirePackage{cmbright}
+  \RequirePackage{sfmath}
 \fi
 
-%% Configure concrete font
+%% Configure Slab-Serif font
+\ifhsrzf@slab
+  \ifhsrzf@sans
+    \PackageError{hsrzf}{%
+      slab and sans options cannot be used at the same time
+    }
+  \fi
+  \ifhsrzf@concrete{hsrzf}{%
+    slab and concrete options cannot be used at the same time
+  }
+  \fi
+
+  \PassOptionsToPackage{T1}{fontenc}
+  \RequirePackage{fontenc}
+  \PassOptionsToPackage{rm,light}{roboto}
+  \RequirePackage{roboto}
+\fi
+
+%% Configure (secret) concrete font
 \ifhsrzf@concrete
-\PassOptionsToPackage{T1}{fontenc}
-\RequirePackage{fontenc}
-\PassOptionsToPackage{boldsans,amssymb}{concmath}
-\RequirePackage{concmath}
+  \ifhsrzf@sans{hsrzf}{%
+    concrete and sans options cannot be used at the same time
+  }
+  \fi
+  \ifhsrzf@slab
+    \PackageError{hsrzf}{%
+      concrete ans slab options cannot be used at the same time
+    }
+  \fi
+
+  \PassOptionsToPackage{boldsans,amssymb}{concmath}
+  \RequirePackage{concmath}
+  \PassOptionsToPackage{T1}{fontenc}
+  \RequirePackage{fontenc}
 \fi
 
 %% configure geometry
@@ -344,30 +388,41 @@
 \newlength{\hsr@vmarginheight}
 
 \ifx\hsrzf@margin\@empty
-    \setlength\hsr@hmarginwidth{30mm}
-    \setlength\hsr@vmarginheight{30mm}
+  \setlength\hsr@hmarginwidth{30mm}
+  \setlength\hsr@vmarginheight{30mm}
 \else
-    \expandafter\ifstrequal\expandafter{\hsrzf@margin}{huge}{
-        \setlength\hsr@hmarginwidth{45mm}
-        \setlength\hsr@vmarginheight{40mm}}{}
-    \expandafter\ifstrequal\expandafter{\hsrzf@margin}{large}{
-        \setlength\hsr@hmarginwidth{35mm}
-        \setlength\hsr@vmarginheight{35mm}}{}
-    \expandafter\ifstrequal\expandafter{\hsrzf@margin}{big}{
-        \setlength\hsr@hmarginwidth{30mm}
-        \setlength\hsr@vmarginheight{30mm}}{}
-    \expandafter\ifstrequal\expandafter{\hsrzf@margin}{normal}{
-        \setlength\hsr@hmarginwidth{25mm}
-        \setlength\hsr@vmarginheight{30mm}}{}
-    \expandafter\ifstrequal\expandafter{\hsrzf@margin}{small}{
-        \setlength\hsr@hmarginwidth{20mm}
-        \setlength\hsr@vmarginheight{30mm}}{}
-    \expandafter\ifstrequal\expandafter{\hsrzf@margin}{tiny}{
-        \setlength\hsr@hmarginwidth{10mm}
-        \setlength\hsr@vmarginheight{20mm}}{}
-    \expandafter\ifstrequal\expandafter{\hsrzf@margin}{minimal}{
-        \setlength\hsr@hmarginwidth{ 5mm}
-        \setlength\hsr@vmarginheight{20mm}}{}
+  \expandafter\ifstrequal\expandafter{\hsrzf@margin}{huge}{
+    \setlength\hsr@hmarginwidth{45mm}
+    \setlength\hsr@vmarginheight{40mm}}{}
+%%
+  \expandafter\ifstrequal\expandafter{\hsrzf@margin}{large}{
+    \setlength\hsr@hmarginwidth{35mm}
+    \setlength\hsr@vmarginheight{35mm}}{}
+%%
+  \expandafter\ifstrequal\expandafter{\hsrzf@margin}{big}{
+    \setlength\hsr@hmarginwidth{30mm}
+    \setlength\hsr@vmarginheight{30mm}}{}
+%%
+  \expandafter\ifstrequal\expandafter{\hsrzf@margin}{normal}{
+    \setlength\hsr@hmarginwidth{25mm}
+    \setlength\hsr@vmarginheight{30mm}}{}
+%%
+  \expandafter\ifstrequal\expandafter{\hsrzf@margin}{small}{
+    \setlength\hsr@hmarginwidth{20mm}
+    \setlength\hsr@vmarginheight{20mm}}{}
+%%
+  \expandafter\ifstrequal\expandafter{\hsrzf@margin}{tiny}{
+    \setlength\hsr@hmarginwidth{10mm}
+    \setlength\hsr@vmarginheight{20mm}}{}
+%%
+  \expandafter\ifstrequal\expandafter{\hsrzf@margin}{minimal}{
+    \setlength\hsr@hmarginwidth{ 5mm}
+    \setlength\hsr@vmarginheight{20mm}}{}
+%%
+  % TODO: fix this
+  % \ClassError{hsrzf}{Invalid margin size}
+  % \setlength\hsr@hmarginwidth{30mm}
+  % \setlength\hsr@vmarginheight{30mm}
 \fi
 
 %</hsrzf|hsrbericht>
@@ -375,6 +430,7 @@
 %^^A%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %^^A HSR ZF specific
 %<*hsrzf>
+%% TODO: change vmarginheight if header is on
 \newgeometry{
     hmargin=\hsr@hmarginwidth,
     vmargin=\hsr@vmarginheight,
@@ -493,3 +549,4 @@
 %    \end{macrocode}
 %
 % \Finale
+% vim: set tw=80 sw=2 ts=2 et :
