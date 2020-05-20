@@ -167,8 +167,8 @@
 
 %% Class options
 \SetupKeyvalOptions{
-  family=hsrzf,
-  prefix=hsrzf@
+  family=hsr,
+  prefix=hsr@
 }
 
 %% Use header and footer
@@ -216,7 +216,7 @@
   \fi
 }
 
-\ProcessKeyvalOptions{hsrzf}
+\ProcessKeyvalOptions{hsr}
 
 
 %% Create new metadata fields
@@ -329,13 +329,13 @@
 
 
 %% Configure Sans-Serif font
-\ifhsrzf@sans
-  \ifhsrzf@slab
+\ifhsr@sans
+  \ifhsr@slab
     \PackageError{hsrzf}{%
       sans ans slab options cannot be used at the same time
     }
   \fi
-  \ifhsrzf@concrete{hsrzf}{%
+  \ifhsr@concrete{hsrzf}{%
     sans and concrete options cannot be used at the same time
   }
   \fi
@@ -347,13 +347,13 @@
 \fi
 
 %% Configure Slab-Serif font
-\ifhsrzf@slab
-  \ifhsrzf@sans
+\ifhsr@slab
+  \ifhsr@sans
     \PackageError{hsrzf}{%
       slab and sans options cannot be used at the same time
     }
   \fi
-  \ifhsrzf@concrete{hsrzf}{%
+  \ifhsr@concrete{hsrzf}{%
     slab and concrete options cannot be used at the same time
   }
   \fi
@@ -365,12 +365,12 @@
 \fi
 
 %% Configure (secret) concrete font
-\ifhsrzf@concrete
-  \ifhsrzf@sans{hsrzf}{%
+\ifhsr@concrete
+  \ifhsr@sans{hsrzf}{%
     concrete and sans options cannot be used at the same time
   }
   \fi
-  \ifhsrzf@slab
+  \ifhsr@slab
     \PackageError{hsrzf}{%
       concrete ans slab options cannot be used at the same time
     }
@@ -387,35 +387,35 @@
 \newlength{\hsr@hmarginwidth}
 \newlength{\hsr@vmarginheight}
 
-\ifx\hsrzf@margin\@empty
+\ifx\hsr@margin\@empty
   \setlength\hsr@hmarginwidth{30mm}
   \setlength\hsr@vmarginheight{30mm}
 \else
-  \expandafter\ifstrequal\expandafter{\hsrzf@margin}{huge}{
+  \expandafter\ifstrequal\expandafter{\hsr@margin}{huge}{
     \setlength\hsr@hmarginwidth{45mm}
     \setlength\hsr@vmarginheight{40mm}}{}
 %%
-  \expandafter\ifstrequal\expandafter{\hsrzf@margin}{large}{
+  \expandafter\ifstrequal\expandafter{\hsr@margin}{large}{
     \setlength\hsr@hmarginwidth{35mm}
     \setlength\hsr@vmarginheight{35mm}}{}
 %%
-  \expandafter\ifstrequal\expandafter{\hsrzf@margin}{big}{
+  \expandafter\ifstrequal\expandafter{\hsr@margin}{big}{
     \setlength\hsr@hmarginwidth{30mm}
     \setlength\hsr@vmarginheight{30mm}}{}
 %%
-  \expandafter\ifstrequal\expandafter{\hsrzf@margin}{normal}{
+  \expandafter\ifstrequal\expandafter{\hsr@margin}{normal}{
     \setlength\hsr@hmarginwidth{25mm}
     \setlength\hsr@vmarginheight{30mm}}{}
 %%
-  \expandafter\ifstrequal\expandafter{\hsrzf@margin}{small}{
+  \expandafter\ifstrequal\expandafter{\hsr@margin}{small}{
     \setlength\hsr@hmarginwidth{20mm}
     \setlength\hsr@vmarginheight{20mm}}{}
 %%
-  \expandafter\ifstrequal\expandafter{\hsrzf@margin}{tiny}{
+  \expandafter\ifstrequal\expandafter{\hsr@margin}{tiny}{
     \setlength\hsr@hmarginwidth{10mm}
     \setlength\hsr@vmarginheight{20mm}}{}
 %%
-  \expandafter\ifstrequal\expandafter{\hsrzf@margin}{minimal}{
+  \expandafter\ifstrequal\expandafter{\hsr@margin}{minimal}{
     \setlength\hsr@hmarginwidth{ 5mm}
     \setlength\hsr@vmarginheight{20mm}}{}
 %%
@@ -460,7 +460,7 @@
     \renewcommand{\footrulewidth}{0pt}
 }
 
-\ifhsrzf@header
+\ifhsr@header
 \pagestyle{hsrzf}
 \fi
 %</hsrzf>

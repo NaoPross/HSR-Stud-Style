@@ -1,7 +1,7 @@
 TEX := xelatex -shell-escape
 
 .PHONY: all clean test
-all: hsrstud.sty hsrstud.pdf hsrzf.cls hsrbericht.cls hsrstud-classes.pdf
+all: hsrstud.sty hsrstud.pdf hsrzf.cls hsrbericht.cls hsrstud-classes.pdf test
 test: test/zf.pdf test/bericht.pdf
 clean:
 	@rm -v \
@@ -53,14 +53,7 @@ hsrstud.pdf: hsrstud.dtx
 hsrstud-classes.pdf: hsrstud-classes.dtx
 	$(TEX) $<
 
-.ONESHELL:
-test/zf.pdf: hsrstud.sty hsrzf.cls hsrbericht.cls
-	cd test
-	$(TEX) zf.tex
-
-.ONESHELL:
-test/bericht.pdf: hsrstud.sty hsrzf.cls hsrbericht.cls
-	cd test
-	$(TEX) bericht.tex
+test/%.pdf: test/%.tex hsrstud.sty hsrzf.cls hsrbericht.cls
+	cd test && $(TEX) $(patsubst test/%.tex,%,$<)
 
 # vim: noet :
