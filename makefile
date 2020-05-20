@@ -1,7 +1,8 @@
 TEX := xelatex -shell-escape
 
-.PHONY: all test clean
+.PHONY: all clean test
 all: hsrstud.sty hsrstud.pdf hsrzf.cls hsrbericht.cls hsrstud-classes.pdf
+test: test/zf.pdf test/bericht.pdf
 clean:
 	@rm -v \
 		hsrbericht.cls \
@@ -27,19 +28,19 @@ clean:
 		hsrstud.toc \
 		hsrstud.vrb \
 		hsrzf.cls \
-		testbericht.aux \
-		testbericht.fdb_latexmk \
-		testbericht.fls \
-		testbericht.log \
-		testbericht.out \
-		testbericht.xdv \
-		testzf.aux \
-		testzf.fdb_latexmk \
-		testzf.fls \
-		testzf.log \
-		testzf.out \
-		testzf.pdf \
-		testzf.xdv \
+		test/bericht.aux \
+		test/bericht.fdb_latexmk \
+		test/bericht.fls \
+		test/bericht.log \
+		test/bericht.out \
+		test/bericht.xdv \
+		test/zf.aux \
+		test/zf.fdb_latexmk \
+		test/zf.fls \
+		test/zf.log \
+		test/zf.out \
+		test/zf.pdf \
+		test/zf.xdv \
 		missfont.log \
         2> /dev/null; true
 
@@ -52,8 +53,14 @@ hsrstud.pdf: hsrstud.dtx
 hsrstud-classes.pdf: hsrstud-classes.dtx
 	$(TEX) $<
 
-test: hsrstud.sty hsrzf.cls hsrbericht.cls
-	$(TEX) testzf.tex
-	$(TEX) testbericht.tex
+.ONESHELL:
+test/zf.pdf: hsrstud.sty hsrzf.cls hsrbericht.cls
+	cd test
+	$(TEX) zf.tex
+
+.ONESHELL:
+test/bericht.pdf: hsrstud.sty hsrzf.cls hsrbericht.cls
+	cd test
+	$(TEX) bericht.tex
 
 # vim: noet :
