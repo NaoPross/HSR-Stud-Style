@@ -12,8 +12,8 @@ clean:
 		hsrstud-classes.fls \
 		hsrstud-classes.log \
 		hsrstud-classes.out \
-		hsrstud-classes.pdf \
 		hsrstud-classes.toc \
+		hsrstud-classes.xdv \
 		hsrstud.dvi \
 		hsrstud.fdb_latexmk \
 		hsrstud.fls \
@@ -23,7 +23,6 @@ clean:
 		hsrstud.ind \
 		hsrstud.log \
 		hsrstud.out \
-		hsrstud.pdf \
 		hsrstud.sty \
 		hsrstud.toc \
 		hsrstud.vrb \
@@ -39,7 +38,6 @@ clean:
 		test/zf.fls \
 		test/zf.log \
 		test/zf.out \
-		test/zf.pdf \
 		test/zf.xdv \
 		missfont.log \
         2> /dev/null; true
