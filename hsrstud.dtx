@@ -268,8 +268,9 @@ The gradient operator.
 \end{example}
 \end{macro}
 
-\begin{macro}{\div}
-The divergence operator, \cs{div} is renamed to \cs{divsymb}.
+\begin{macro}{\div, \divg}
+The divergence operator, \cs{div} is renamed to \cs{divsymb}. If the option 
+|donotrenew| is used \cs{divg} is also available.
 \begin{example}
 \[ \div f \]
 \end{example}
@@ -433,7 +434,7 @@ The laplace operator.
 }
 
 %% Set style
-\lstset{style=hsr-base, escapechar=`}        
+\lstset{style=hsr-base, escapechar=`}
 %%))
 %    \end{macrocode}
 
@@ -449,9 +450,8 @@ The laplace operator.
     \renewcommand{\@hsrvecf}[1]{\hsrvecarrow{#1}}
 \fi
 
-\ifhsr@dontrenew
-    \newcommand{\vc}{\@hsrvecf}
-\else
+\newcommand{\vc}{\@hsrvecf}
+\ifhsr@dontrenew\else
     % save previous command
     \newcommand{\vaccent}{\v}
     \newcommand{\oldvec}{\vec}
@@ -508,39 +508,39 @@ The laplace operator.
 %    \begin{macrocode}
 %% Gradient ((
 \ifhsr@textvecdiff
-    \newcommand{\grad}{\text{grad }}
+    \DeclareMathOperator{\grad}{grad}
 \else
-    \newcommand{\grad}{\nabla}%
+    \DeclareMathOperator{\grad}{\nabla}
 \fi
 %% ))
 
 %% Divergence ((
 \ifhsr@textvecdiff
-    \newcommand{\@hsrdivf}{\text{div }}
+    \newcommand{\@hsrdivf}{div}
 \else
     \newcommand{\@hsrdivf}{\nabla\cdot}
 \fi
-\ifhsr@dontrenew
-    \newcommand{\divg}{\@hsrdivf}
-\else
+
+\DeclareMathOperator{\divg}{\@hsrdivf}
+\ifhsr@dontrenew\else
     \let\divsymb=\div
-    \renewcommand{\div}{\@hsrdivf}
+    \renewcommand{\div}{\operatorname{\@hsrdivf}}
 \fi
 %% ))
 
 %% Curl ((
 \ifhsr@textvecdiff
-    \newcommand{\curl}{\text{curl }}
+    \DeclareMathOperator{\curl}{curl}
 \else
-    \newcommand{\curl}{\nabla\times}
+    \DeclareMathOperator{\curl}{\nabla\times}
 \fi
 %% ))
 
 %% laplacian ((
 \ifhsr@textvecdiff
-    \newcommand{\laplace}{\text{div grad }}
+    \DeclareMathOperator{\laplace}{div grad}
 \else
-    \newcommand{\laplace}{\nabla^2}
+    \DeclareMathOperator{\laplace}{\nabla^2}
 \fi
 %% ))
 %    \end{macrocode}
