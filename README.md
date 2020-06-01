@@ -34,7 +34,14 @@
 - [ ] More options (suggestions?)
 
 ## Compile
-It is as simple as it gets. 
+### Automagically with `latexmk`
+It is as simple as it gets.
+```
+$ latexmk
+```
+The output will be generated in a directory called `build`.
+
+### Manually
 This will generate many files including `hsrstud.sty` that can be placed in the folder of any other LaTeX project, which can access the library with `\usepackage{hsrstud}`
 ```
 $ xelatex hsrstud.ins
