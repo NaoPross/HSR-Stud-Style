@@ -7,7 +7,6 @@
     - [X] `donotrenew` don't rename predefined LaTeX commands and environments
     - [X] `arrowvec` vectors with arrows
     - [X] `textvecdiff` vector dervivatives without Del notation
-    - [X] `legacy` backwards compatibility with HSR-Stud/header etc.
     - [ ] `ost` use the new OST theme and colors
   - [X] Macros
     - [X] Vectors, Matrices and Tensors
@@ -16,11 +15,8 @@
     - [ ] Book and external material references
   - [X] HSR Colors
   - [ ] OST Colors
-  - [ ] Legacy support
-    - [ ] Formelbuch macros
-    - [X] Legacy color names
 - [ ] Document classes
-  - [ ] Essay 
+  - [ ] Essay
   - [X] `hsrzf` Summary (Zusammenfassung)
   - [ ] `hsrbericht` Report (Bericht)
   - [ ] `hsrsa` Simple thesis (Studentenarbeit)
