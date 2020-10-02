@@ -175,11 +175,9 @@
 \DeclareBoolOption[false]{header}
 \DeclareComplementaryOption{noheader}{header}
 
-%% Use a sans-serif font
+%% Use a sans-serif slab-serif or concrete font
 \DeclareBoolOption[false]{sans}
 \DeclareBoolOption[false]{slab}
-
-% secret option :)
 \DeclareBoolOption[false]{concrete}
 
 %% Configures the geometry package
@@ -440,11 +438,14 @@
 
 \fancypagestyle{hsrzf}{%
     \fancyhf{} % clear
-    \fancyhead[C]{\thetitle}
-    \fancyhead[R]{\rightmark}
     \fancyhead[L]{\leftmark}
-    \fancyfoot[R]{\@date}
-    \fancyfoot[L]{\theauthor}
+    \fancyhead[C]{\themodule}
+    \fancyhead[R]{\@date}
+
+    \fancyfoot[L]{\href{https://github.com/HSR-Stud/}{\texttt{HSR-Stud}}}
+    \fancyfoot[C]{\texttt{CC BY-NC-SA}}
+    \fancyfoot[R]{\thepage ~/ \pageref{LastPage}}
+
     \renewcommand{\headrulewidth}{.5pt}
     \renewcommand{\footrulewidth}{.5pt}
 }
