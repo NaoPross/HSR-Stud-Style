@@ -20,11 +20,45 @@
 
 %% Metadata
 \title{\textcolor{hsr-blue}{HSR}--Stud Document Classes}
-\author{Naoki Pross \texttt{<npross@hsr.ch>}}
+\author{Naoki Pross \texttt{<naoki.pross@ost.ch>}}
 \date{\today}
 
 \begin{document}
 \DocInput{\jobname.dtx}
+
+\section{Minimal working examples}
+
+\begin{lstlisting}
+\documentclass[margin=normal]{hsrzf}
+
+% Packages
+%% the HSRStud package
+\usepackage{hsrstud}
+
+% Metadata
+\course{Elektrotechnik}
+\module{ModAbk}
+\semester{Herbstsemester 2020}
+
+\authoremail{vname@hsr.ch}
+\author{\textsl{Vorname Name} -- \texttt{\theauthoremail}}
+
+\title{\texttt{\themodule} Zusammenfassung}
+\date{\thesemester}
+
+% document
+\begin{document}
+\maketitle
+\tableofcontents
+\section{Introduction}
+\[
+  i\hbar \partial_t \left| \psi(t) \right\rangle 
+    = \hat{H} \left| \psi(t) \right\rangle
+\]
+
+\end{document}
+\end{lstlisting}
+
 \end{document}
 %</doc>
 % \fi
@@ -101,8 +135,6 @@
 %   \item[\tt header] Use the HSR--Stud standard header. The option 
 %     {\tt noheader} disables the header.
 % \end{description}
-%
-% \subsection{Minimal working example}
 %
 %^^A%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %^^A Bericht Class Documentation
@@ -553,4 +585,4 @@
 %    \end{macrocode}
 %
 % \Finale
-% vim: set tw=80 sw=2 ts=2 et :
+%^^A vim:set tw=80 sw=2 ts=2 et:
