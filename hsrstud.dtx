@@ -110,8 +110,8 @@ HSR-Stud org.
 
    \item[|textvecdiff|] Disables the ``Nabla'' or ``Del'' notation 
    for vector derivatives. Instead the symbols
-   \(\nabla, \nabla \cdot, \nabla \times, \nabla^2\) are be replaced with 
-   grad, div, curl and div grad.
+   \(\vec{\nabla}, \vec{\nabla}\dotp, \vec{\nabla}\crossp, \nabla^2\) are be
+   replaced with grad, div, curl and div grad.
 \end{description}
 
 \section{Summary notation}
@@ -174,27 +174,17 @@ Cross product between vectors.
 \end{macro}
 
 
-\subsection{Matrices and Tensors}
+\subsection{Matrices}
 
-\begin{macro}{\mtx}
+\begin{macro}{\mx}
 Matrix notation. Takes \marg{letter}.
 
 \begin{example}
 \[
-    \mtx{J} = \begin{pmatrix}
+    \mx{J} = \begin{pmatrix}
                 0 & 1 \\
                 1 & 0
               \end{pmatrix}
-\]
-\end{example}
-\end{macro}
-
-\begin{macro}{\ten}
-Tensor notation. Takes \marg{letter}.
-\begin{example}
-\[
-   \vec{T}^{(\vec{n})} =
-   \uvec{n}\dotp\ten{\sigma}
 \]
 \end{example}
 \end{macro}
@@ -272,14 +262,14 @@ The gradient operator.
 The divergence operator, \cs{div} is renamed to \cs{divsymb}. If the option 
 |donotrenew| is used \cs{divg} is also available.
 \begin{example}
-\[ \div f \]
+\[ \div \vec{f} \]
 \end{example}
 \end{macro}
 
 \begin{macro}{\curl}
 The curl operator.
 \begin{example}
-\[ \curl f \]
+\[ \curl \vec{f} \]
 \end{example}
 \end{macro}
 
@@ -442,7 +432,7 @@ The laplace operator.
 %    \subsubsection{Vectors}
 %    \begin{macrocode}
 %% Vector ((
-\newcommand{\hsrvecbold}[1]{\mathbf{\boldsymbol{#1}}}
+\newcommand{\hsrvecbold}[1]{\mathbf{\bm{#1}}}
 \newcommand{\hsrvecarrow}[1]{\vv{\mathrm{#1}}} % from esvect
 
 \newcommand{\@hsrvecf}[1]{\hsrvecbold{#1}}
@@ -482,8 +472,7 @@ The laplace operator.
 
 %    \subsubsection{Matrices and Tensors}
 %    \begin{macrocode}
-\newcommand{\mtx}[1]{\mathrm{#1}}
-\newcommand{\ten}[1]{\underline{\mathbf{\boldsymbol{#1}}}}
+\newcommand{\mx}[1]{\mb{\mathrm{#1}}}
 %    \end{macrocode}
 
 %    \subsubsection{Equalities}
@@ -510,7 +499,7 @@ The laplace operator.
 \ifhsr@textvecdiff
     \DeclareMathOperator{\grad}{grad}
 \else
-    \DeclareMathOperator{\grad}{\nabla}
+	\newcommand{\grad}{\vec{\nabla}}
 \fi
 %% ))
 
@@ -518,7 +507,7 @@ The laplace operator.
 \ifhsr@textvecdiff
     \newcommand{\@hsrdivf}{div}
 \else
-    \newcommand{\@hsrdivf}{\nabla\cdot}
+	\newcommand{\@hsrdivf}{\vec{\nabla}\dotp}
 \fi
 
 \DeclareMathOperator{\divg}{\@hsrdivf}
@@ -532,7 +521,7 @@ The laplace operator.
 \ifhsr@textvecdiff
     \DeclareMathOperator{\curl}{curl}
 \else
-    \DeclareMathOperator{\curl}{\nabla\times}
+	\DeclareMathOperator{\curl}{\vec{\nabla}\crossp}
 \fi
 %% ))
 
