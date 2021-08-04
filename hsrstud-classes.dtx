@@ -18,6 +18,10 @@
 \usepackage{booktabs}
 \usepackage{enumitem}
 
+\CodelineIndex
+\EnableCrossrefs
+\RecordChanges
+
 %% Metadata
 \title{\textcolor{hsr-blue}{HSR}--Stud Document Classes}
 \author{Naoki Pross \texttt{<naoki.pross@ost.ch>}}
@@ -25,39 +29,6 @@
 
 \begin{document}
 \DocInput{\jobname.dtx}
-
-\section{Minimal working examples}
-
-\begin{lstlisting}
-\documentclass[margin=normal]{hsrzf}
-
-% Packages
-%% the HSRStud package
-\usepackage{hsrstud}
-
-% Metadata
-\course{Elektrotechnik}
-\module{ModAbk}
-\semester{Herbstsemester 2020}
-
-\authoremail{vname@hsr.ch}
-\author{\textsl{Vorname Name} -- \texttt{\theauthoremail}}
-
-\title{\texttt{\themodule} Zusammenfassung}
-\date{\thesemester}
-
-% document
-\begin{document}
-\maketitle
-\tableofcontents
-\section{Introduction}
-\[
-  i\hbar \partial_t \left| \psi(t) \right\rangle 
-    = \hat{H} \left| \psi(t) \right\rangle
-\]
-
-\end{document}
-\end{lstlisting}
 
 \end{document}
 %</doc>
@@ -165,12 +136,43 @@
 %     department / \dots .
 % \end{description}
 %
-% \subsection{Minimal working example}
-%
-%
+% \section{Minimal working examples}
+% 
+% \begin{lstlisting}
+  \documentclass[margin=normal]{hsrzf}
+  
+  % Packages
+  %% the HSRStud package
+  \usepackage{hsrstud}
+  
+  % Metadata
+  \course{Elektrotechnik}
+  \module{ModAbk}
+  \semester{Herbstsemester 2020}
+  
+  \authoremail{vname@hsr.ch}
+  \author{\textsl{Vorname Name} -- \texttt{\theauthoremail}}
+  
+  \title{\texttt{\themodule} Zusammenfassung}
+  \date{\thesemester}
+  
+  % document
+  \begin{document}
+  \maketitle
+  \tableofcontents
+  \section{Introduction}
+  \[
+    i\hbar \partial_t \left| \psi(t) \right\rangle 
+      = \hat{H} \left| \psi(t) \right\rangle
+  \]
+  
+  \end{document}\end{lstlisting}
 % 
 % \section{License}
 % \doclicenseThis
+%
+% \PrintChanges
+% \PrintIndex
 % 
 % \section{Implementation}
 %    \begin{macrocode}

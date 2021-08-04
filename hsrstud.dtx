@@ -5,7 +5,7 @@
 
 %<*package>
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{hsrstud}[2020/04/16 v0.1 HSR-Stud Macros]
+\ProvidesPackage{hsrstud}[2021/08/04 v0.2 HSR-Stud Macros]
 %</package>
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -13,6 +13,7 @@
 %<*doc>
 \documentclass[a4paper]{ltxdoc}
 
+\usepackage{hypdoc}
 
 %% https://tex.stackexchange.com/questions/95882/avoid-multicol-error-error-saving-partial-page
 %% \setlength\IndexMin{100pt}
@@ -27,6 +28,7 @@
 \usepackage{booktabs}
 \usepackage{tikz}
 \usepackage{xargs}
+\usepackage{bookmark}
 
 \usepackage[
     type={CC},
@@ -35,6 +37,7 @@
 ]{doclicense}
 
 \CodelineIndex
+\EnableCrossrefs
 \RecordChanges
 
 \makeatletter
@@ -89,7 +92,8 @@
 \maketitle
 \tableofcontents
 
-\changes{v0.1}{2020/02/16}{Initial Draft}
+\changes{v0.2}{2021/08/05}{Remove legacy code and update notation}
+\changes{v0.1}{2020/02/16}{Initial draft}
 
 \section{Purpose of this package}
 This package is made for the HSR Studenten organization to provide an easy to 
@@ -101,17 +105,17 @@ HSR-Stud org.
 
 \section{Package Options} \label{sec:options}
 \begin{description}[align=right]
-   \item[|dontrenew|] Do not renew existing \LaTeX{} commands and  
-   environments. This is useful when the package is loaded on a document that 
-   is already partiall written.
+   \item[|dontrenew|] Do not renew existing \LaTeX{} commands and
+       environments. This is useful when the package is loaded on a document
+        that is already partiall written.
 
-   \item[|arrowvec|] Tells the package to use a vector notation 
-   with a small arrow over the variables, as it were handwritten.
+   \item[|arrowvec|] Tells the package to use a vector notation with a small
+       arrow over the variables, as it were handwritten.
 
-   \item[|textvecdiff|] Disables the ``Nabla'' or ``Del'' notation 
-   for vector derivatives. Instead the symbols
-   \(\vec{\nabla}, \vec{\nabla}\dotp, \vec{\nabla}\crossp, \nabla^2\) are be
-   replaced with grad, div, curl and div grad.
+   \item[|textvecdiff|] Disables the ``Nabla'' or ``Del'' notation for vector
+       derivatives. Instead the symbols \(\vec{\nabla}, \vec{\nabla}\dotp,
+        \vec{\nabla}\crossp, \nabla^2, \vec{\nabla}^2\) are be replaced with
+        grad, div, curl and div grad.
 \end{description}
 
 \section{Summary notation}
@@ -138,21 +142,22 @@ int main(int argc, char *argv[], char *envp[]) {
 \section{Mathematics}
 \subsection{Vectors}
 
-\begin{macro}{\vec, \v, \vc}
-Vectors notation. If the option \texttt{arrowvec} described in \S 
-\ref{sec:options} is enabled, the notation with a small arrow over the 
-varible will be used \(\hsrvecarrow{x}\), otherwise the vector is bold
-\(\hsrvecbold{x}\). Takes one option \marg{letter}. \cs{v} is renamed to 
-\cs{vaccent} and \cs{vec} to \cs{oldvec}.
+\begin{macro}{\vec}
+
+Vectors notation. Aliases: \cs{v}, \cs{vc}. If the option \texttt{arrowvec}
+described in \S \ref{sec:options} is enabled, the notation with a small
+arrow over the varible will be used \(\hsrvecarrow{x}\), otherwise the
+vector is bold \(\hsrvecbold{x}\). Takes one option \marg{letter}. \cs{v}
+is renamed to \cs{vaccent} and \cs{vec} to \cs{oldvec}.
+
 \begin{example}
 \[ \vec{F} = m\vec{a} \]
 \end{example}
 \end{macro}
 
-\begin{macro}{\uvec, \uv}
-Unit vector notation. Takes \marg{letter}. It is implemented in terms of
-\cmd{\vec}, which means that the style is inherited.
-
+\begin{macro}{\uvec}
+Unit vector notation. Alias \cs{uv}. Takes \marg{letter}. It is implemented
+in terms of \cmd{\vec}, which means that the style is inherited.
 \begin{example}
 \[ \uvec{x} = \vec{x}/x \]
 \end{example}
@@ -166,10 +171,10 @@ Dot product between vectors.
 \end{example}
 \end{macro}
 
-\begin{macro}{\crossp, \cross}
+\begin{macro}{\crossp}
 Cross product between vectors.
 \begin{example}
-\[ \vec{u}\cross\vec{v} \]
+\[ \vec{u}\crossp\vec{v} \]
 \end{example}
 \end{macro}
 
@@ -193,13 +198,13 @@ Matrix notation. Takes \marg{letter}.
 
 \begin{macro}{\heq}
  L'H\^opital limit equality symbol.
-\begin{example}
+\begin{hexample}
 \[
     \lim_{x\to\infty} \frac{x}{x^2 - 1}
         \heq \lim_{x\to\infty} \frac{1}{2x}
         = 0
 \]
-\end{example}
+\end{hexample}
 \end{macro}
 
 \subsection{Derivatives}
@@ -216,15 +221,15 @@ argument \oarg{order}.
 \begin{macro}{\di}
 This is the same as \cs{dd} but with a small space in front, it is 
 intended to be used in integrals for a nicer typesetting.
-\begin{example}
+\begin{hexample}
 \begin{align*}
     I &= \int \vec{J}\dotp\dd{\vec{s}} \\
       &= \iint \vec{J}\dotp\uvec{n}\di{x}\di{y}
 \end{align*}
-\end{example}
+\end{hexample}
 \end{macro}
 
-\subsubsection{Classical}
+\subsubsection{Scalar functions}
 
 \begin{macro}{\deriv}
 The derivative has arguments \marg{function}, \marg{var} and the optional 
@@ -249,16 +254,16 @@ optional argument \oarg{order}.
 \end{example}
 \end{macro}
 
-\subsubsection{Vector}
+\subsubsection{Vector functions}
 
 \begin{macro}{\grad}
-The gradient operator.
+The gradient vector operator.
 \begin{example}
 \[ \grad f \]
 \end{example}
 \end{macro}
 
-\begin{macro}{\div, \divg}
+\begin{macro}{\div}
 The divergence operator, \cs{div} is renamed to \cs{divsymb}. If the option 
 |donotrenew| is used \cs{divg} is also available.
 \begin{example}
@@ -273,10 +278,21 @@ The curl operator.
 \end{example}
 \end{macro}
 
-\begin{macro}{\laplace}
-The laplace operator.
+\begin{macro}{\laplacian}
+The laplacian operator.
 \begin{example}
-\[ \laplace f \]
+\[
+	\laplacian f
+\]
+\end{example}
+\end{macro}
+
+\begin{macro}{\vlaplacian}
+The vector laplacian operator operator.
+\begin{example}
+\[
+	\vlaplacian \vec{F}
+\]
 \end{example}
 \end{macro}
 
@@ -305,12 +321,15 @@ The laplace operator.
 \section{License}
 \doclicenseThis
 
-% \begin{thebibliography}{3}
-%     \bibitem{bib:hsrcolors}
-%         HSR Intern: Corporate Design / Farben,
-%         \textit{Hochschule f\"ur Technik Rapperswil},
-%         \url{https://intranet.hsr.ch/Farben.7715.0.html}
-% \end{thebibliography}
+\begin{thebibliography}{3}
+    \bibitem{bib:hsrcolors}
+        HSR Intern: Corporate Design / Farben,
+        \textit{Hochschule f\"ur Technik Rapperswil},
+        \url{https://intranet.hsr.ch/Farben.7715.0.html}
+\end{thebibliography}
+
+\PrintChanges
+\PrintIndex
 
 \DocInput{\jobname.dtx}
 
@@ -320,13 +339,14 @@ The laplace operator.
 %\fi
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% hsrstud package implementation with inline documentation
+%	 \appendix
+%    \section{Implementation}
+% 	 |hsrstud| package implementation with inline documentation
 
 %\iffalse
 %<*package>
 %\fi
 
-%    \section{Implementation}
 %    \subsection{Dependencies}
 %    \begin{macrocode}
 %% Dependencies ((
@@ -466,13 +486,12 @@ The laplace operator.
 %% Products ((
 \newcommand{\dotp}{\boldsymbol\cdot}
 \newcommand{\crossp}{\boldsymbol\times}
-\newcommand{\cross}{\crossp}
 %%))
 %    \end{macrocode}
 
 %    \subsubsection{Matrices and Tensors}
 %    \begin{macrocode}
-\newcommand{\mx}[1]{\mb{\mathrm{#1}}}
+\newcommand{\mx}[1]{\bm{\mathrm{#1}}}
 %    \end{macrocode}
 
 %    \subsubsection{Equalities}
@@ -527,9 +546,15 @@ The laplace operator.
 
 %% laplacian ((
 \ifhsr@textvecdiff
-    \DeclareMathOperator{\laplace}{div grad}
+    \DeclareMathOperator{\laplacian}{div grad}
 \else
-    \DeclareMathOperator{\laplace}{\nabla^2}
+    \DeclareMathOperator{\laplacian}{\nabla^2}
+\fi
+
+\ifhsr@textvecdiff
+    \DeclareMathOperator{\vlaplacian}{div grad}
+\else
+	\DeclareMathOperator{\vlaplacian}{\vec{\nabla}^2}
 \fi
 %% ))
 %    \end{macrocode}

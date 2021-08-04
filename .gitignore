@@ -5,8 +5,8 @@
 build/*
 !build/hsrstud.pdf
 !build/hsrstud-classes.pdf
-!build/bericht.pdf
-!build/zf.pdf
+!build/test/bericht.pdf
+!build/test/zf.pdf
 
 # Created by https://www.gitignore.io/api/vim,tex,linux,macos,windows
 # Edit at https://www.gitignore.io/?templates=vim,tex,linux,macos,windows
