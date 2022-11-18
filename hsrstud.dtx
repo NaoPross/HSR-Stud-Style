@@ -282,7 +282,7 @@ The curl operator.
 The laplacian operator.
 \begin{example}
 \[
-	\laplacian f
+    \laplacian f
 \]
 \end{example}
 \end{macro}
@@ -291,7 +291,7 @@ The laplacian operator.
 The vector laplacian operator operator.
 \begin{example}
 \[
-	\vlaplacian \vec{F}
+    \vlaplacian \vec{F}
 \]
 \end{example}
 \end{macro}
@@ -339,9 +339,9 @@ The vector laplacian operator operator.
 %\fi
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%	 \appendix
+%    \appendix
 %    \section{Implementation}
-% 	 |hsrstud| package implementation with inline documentation
+%    |hsrstud| package implementation with inline documentation
 
 %\iffalse
 %<*package>
@@ -518,7 +518,7 @@ The vector laplacian operator operator.
 \ifhsr@textvecdiff
     \DeclareMathOperator{\grad}{grad}
 \else
-	\newcommand{\grad}{\vec{\nabla}}
+    \newcommand{\grad}{\vec{\nabla}}
 \fi
 %% ))
 
@@ -526,7 +526,7 @@ The vector laplacian operator operator.
 \ifhsr@textvecdiff
     \newcommand{\@hsrdivf}{div}
 \else
-	\newcommand{\@hsrdivf}{\vec{\nabla}\dotp}
+    \newcommand{\@hsrdivf}{\vec{\nabla}\dotp}
 \fi
 
 \DeclareMathOperator{\divg}{\@hsrdivf}
@@ -540,7 +540,7 @@ The vector laplacian operator operator.
 \ifhsr@textvecdiff
     \DeclareMathOperator{\curl}{curl}
 \else
-	\DeclareMathOperator{\curl}{\vec{\nabla}\crossp}
+    \DeclareMathOperator{\curl}{\vec{\nabla}\crossp}
 \fi
 %% ))
 
@@ -554,7 +554,7 @@ The vector laplacian operator operator.
 \ifhsr@textvecdiff
     \DeclareMathOperator{\vlaplacian}{div grad}
 \else
-	\DeclareMathOperator{\vlaplacian}{\vec{\nabla}^2}
+    \DeclareMathOperator{\vlaplacian}{\vec{\nabla}^2}
 \fi
 %% ))
 %    \end{macrocode}
