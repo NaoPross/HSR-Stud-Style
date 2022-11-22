@@ -27,7 +27,16 @@
 %
 %<*driver>
 \documentclass{ltxdoc}
+
 \usepackage{oststud}
+\usepackage{enumitem}
+\usepackage[
+    type={CC},
+    modifier={by-sa},
+    version={4.0},
+]{doclicense}
+
+
 \EnableCrossrefs         
 \CodelineIndex
 \RecordChanges
@@ -39,55 +48,51 @@
 %</driver>
 % \fi
 %
-% \CheckSum{0}
-%
-% \CharacterTable
-%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
-%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
-%   Digits        \0\1\2\3\4\5\6\7\8\9
-%   Exclamation   \!     Double quote  \"     Hash (number) \#
-%   Dollar        \$     Percent       \%     Ampersand     \&
-%   Acute accent  \'     Left paren    \(     Right paren   \)
-%   Asterisk      \*     Plus          \+     Comma         \,
-%   Minus         \-     Point         \.     Solidus       \/
-%   Colon         \:     Semicolon     \;     Less than     \<
-%   Equals        \=     Greater than  \>     Question mark \?
-%   Commercial at \@     Left bracket  \[     Backslash     \\
-%   Right bracket \]     Circumflex    \^     Underscore    \_
-%   Grave accent  \`     Left brace    \{     Vertical bar  \|
-%   Right brace   \}     Tilde         \~}
-%
-%
 % \changes{v0.1}{2022/11/18}{Initial version}
 % \changes{v0.2}{2022/11/22}{Port features of \texttt{hsrstud}}
 %
 % \GetFileInfo{oststud.dtx}
 %
 % \DoNotIndex{\newcommand,\newenvironment,\fi,\else}
-% 
 %
 % \title{
 %   \texttt{\textcolor{OSTBlackberry}{ost}stud} --- 
 %    OST-Stud Style and Macros\thanks{
-%        This document corresponds to \textsf{oststud}~\fileversion, dated
-%        \filedate.
+%        This document corresponds to \textsf{oststud}~\fileversion, last
+%        revised \filedate.
 %   }
 % }
 % \author{Naoki Sean Pross \texttt{<np@0hm.ch>}}
+% \date{Released \filedate}
 %
 % \maketitle
 % \tableofcontents
 %
-% \section{Introduction}
+% \section*{License}
+% \doclicenseThis
+%
+% \section{Purpose of this Package}
 %
 % This package is made for the OST Studenten organization to provide an easy to
-% use interface to give a more consistent look and feel for the works produced
-% by its the members. This package is the successor after the fusion of the old
-% |hsrstud| package.
+% use interface that gives a more consistent look and feel for the works
+% produced by its the members. This package is the successor after the fusion
+% of the old |hsrstud| package.
+%
+% \section{Package Options}
+% \begin{description}[align=right]
+%    \item[|dontrenew|] Do not renew existing \LaTeX{} commands and
+%        environments. This is useful when the package is loaded on a document
+%         that is already partially written.
+%    \item[|textvecdiff|] Disables the ``Nabla'' or ``Del'' notation for vector
+%        derivatives. Instead the symbols \(\vec{\nabla}, \vec{\nabla}\dotp,
+%         \vec{\nabla}\crossp, \nabla^2, \vec{\nabla}^2\) are be replaced with
+%         grad, div, curl and div grad.
+% \end{description}
 %
 % \section{Usage}
 %
-% Put text here.
+% First, it is to not that this packages sets some sane defaults to the
+% |hyperref| and |listings| packages.
 %
 % \DescribeMacro{\dummyMacro}
 % This macro does nothing.\index{doing nothing|usage} It is merely an
@@ -119,11 +124,6 @@
 \RequirePackage{hyperref}
 \RequirePackage{listings}
 %    \end{macrocode}
-% To program the package's internal logic we import the following dependencies.
-%    \begin{macrocode}
-\RequirePackage{iftex}
-\RequirePackage{kvoptions}
-%    \end{macrocode}
 % Then we create the options for the package.
 %    \begin{macrocode}
 \SetupKeyvalOptions{
@@ -154,7 +154,7 @@
 % \end{macro}
 %
 % \begin{macro}{\uvec}
-% In vector calculus the unit vectors are usually denoted by a hat.
+% In vector calculus unit vectors are usually denoted by a hat.
 %    \begin{macrocode}
 \newcommand{\uvec}[1]{\vec{\hat{#1}}}
 %    \end{macrocode}
