@@ -22,7 +22,7 @@
 %<package>\NeedsTeXFormat{LaTeX2e}[2005/12/01]
 %<package>\ProvidesPackage{oststud}
 %<*package>
-    [2022/11/18 v1.0 OST S]
+    [2022/11/22 v0.2 OST Student's package]
 %</package>
 %
 %<*driver>
@@ -58,15 +58,17 @@
 %   Right brace   \}     Tilde         \~}
 %
 %
-% \changes{v1.0}{2022/11/18}{Initial version}
+% \changes{v0.1}{2022/11/18}{Initial version}
+% \changes{v0.2}{2022/11/22}{Port features of \texttt{hsrstud}}
 %
 % \GetFileInfo{oststud.dtx}
 %
-% \DoNotIndex{\newcommand,\newenvironment}
+% \DoNotIndex{\newcommand,\newenvironment,\fi,\else}
 % 
 %
 % \title{
-%   \texttt{oststud} --- OST-Stud Syle and Macros\thanks{
+%   \texttt{\textcolor{OSTBlackberry}{ost}stud} --- 
+%    OST-Stud Style and Macros\thanks{
 %        This document corresponds to \textsf{oststud}~\fileversion, dated
 %        \filedate.
 %   }
@@ -103,44 +105,140 @@
 %
 % \section{Implementation}
 %
-% First, import the necessary dependencies.
+% \subsection{Dependencies and Parse Options}
 %
+% First, we have the dependencies necessary for typesetting.
 %    \begin{macrocode}
 \RequirePackage{xcolor}
+\RequirePackage{amsmath}
+\RequirePackage{amssymb}
+\RequirePackage{bm}
+%    \end{macrocode}
+% This package also sets sane defaults to the following packages.
+%    \begin{macrocode}
+\RequirePackage{hyperref}
+\RequirePackage{listings}
+%    \end{macrocode}
+% To program the package's internal logic we import the following dependencies.
+%    \begin{macrocode}
+\RequirePackage{iftex}
+\RequirePackage{kvoptions}
+%    \end{macrocode}
+% Then we create the options for the package.
+%    \begin{macrocode}
+\SetupKeyvalOptions{
+    family=ost,
+    prefix=ost@
+}
+\DeclareBoolOption[false]{dontrenew}
+\DeclareBoolOption[false]{textvecdiff}
+\ProcessLocalKeyvalOptions*
 %    \end{macrocode}
 %
-% \begin{macro}{\dummyMacro}
-% This is a dummy macro.  If it did anything, we'd describe its
-% implementation here.
+% \subsection{Vectors and Vector Calculus}
+%
+% \begin{macro}{\vec}
+% In the physics used by electrical engineers it is common to use bold letters
+% for vectors. If the |dontrenew| option is set a new macro |\bvec| (bold
+% |\vec|) defines the bold vector notation. Otherwise the default vector
+% notation with the tiny ugly arrow is saved in |\oldvec|.
 %    \begin{macrocode}
-\newcommand{\dummyMacro}{}
+\newcommand{\ost@vec}[1]{\mathbf{\bm{#1}}}
+\ifost@dontrenew
+    \newcommand{\bvec}[1]{\ost@vec{#1}}
+\else
+    \newcommand{\oldvec}[1]{\vec{#1}}
+    \renewcommand{\vec}[1]{\ost@vec{#1}}
+\fi
 %    \end{macrocode}
 % \end{macro}
 %
-% \begin{environment}{dummyEnv}
-% This is a dummy environment.  If it did anything, we'd describe its
-% implementation here.
+% \begin{macro}{\uvec}
+% In vector calculus the unit vectors are usually denoted by a hat.
 %    \begin{macrocode}
-\newenvironment{dummyEnv}{%
-}{%
+\newcommand{\uvec}[1]{\vec{\hat{#1}}}
 %    \end{macrocode}
-% \changes{v1.0a}{2004/11/05}{Added a spurious change log entry to
-%   show what a change \emph{within} an environment definition looks
-%   like.}
-% Don't use |%| to introduce a code comment within a |macrocode|
-% environment.  Instead, you should typeset all of your comments with
-% \LaTeX---doing so gives much prettier results.  For comments within a
-% macro/environment body, just do an |\end{macrocode}|, include some
-% commentary, and do another |\begin{macrocode}|.  It's that simple.
+% \end{macro}
+%
+% \begin{macro}{\dotp,\crossp}
+% To differentiate them from |\cdot| and |\times| which are for scalars.
 %    \begin{macrocode}
-}
+\DeclareMathOperator{\dotp}{\boldsymbol\cdot}
+\DeclareMathOperator{\crossp}{\boldsymbol\times}
 %    \end{macrocode}
-% \end{environment}
+% \end{macro}
+%
+% \begin{macro}{\grad}
+% Gradient of a vector valued scalar functon.
+%    \begin{macrocode}
+\ifost@textvecdiff
+    \DeclareMathOperator{\grad}{grad}
+\else
+    \DeclareMathOperator{\grad}{\vec{\nabla}}
+\fi
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\div}
+% Divergence operator. If the option |dontrenew| is a new macro |\divg| is
+% defined. Otherwise |\div| is renamed to |\divsymb|.
+%    \begin{macrocode}
+\ifost@textvecdiff
+    \DeclareMathOperator{\ost@div}{div}
+\else
+    \DeclareMathOperator{\ost@div}{\vec{\nabla}\dotp}
+\fi
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\curl}
+% Curl of a vector field.
+%    \begin{macrocode}
+\ifost@textvecdiff
+    \DeclareMathOperator{\curl}{curl}
+\else
+    \DeclareMathOperator{\curl}{\vec{\nabla}\crossp}
+\fi
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\laplacian,\vlaplacian}
+% Laplacian of a scalar and vector field.
+%    \begin{macrocode}
+\ifost@textvecdiff
+    \DeclareMathOperator{\laplacian}{\div\grad}
+    \DeclareMathOperator{\vlaplacian}{\div\grad}
+\else
+    \DeclareMathOperator{\laplacian}{\nabla^2}
+    \DeclareMathOperator{\vlaplacian}{\vec{\nabla}^2}
+\fi
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{References}
+%
+% \begin{macro}{\skriptum,\sref}
+% Reference material in the skriptum (lecture notes) of the course.
+%    \begin{macrocode}
+\newcommand{\ost@skriptum}{\PackageWarning{No \noexpand\skriptum given}}
+\newcommand{\skriptum}[1]{\gdef\ost@skriptum{#1}}
+\newcommand{\sref}[1]{%
+    \texttt{\textcolor{OSTBlackberry}{#1}}\nocite{\ost@skriptum}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\textbook,\bref}
+% Reference material in the textbook of the course.
+%    \begin{macrocode}
+\newcommand{\ost@textbook}{\PackageWarning{No \noexpand\textbook given}}
+\newcommand{\textbook}[1]{\gdef\ost@textbook{#1}}
+\newcommand{\bref}[1]{%
+    \texttt{\textcolor{OSTRaspberry}{#1}}\nocite{\ost@textbook}}
+%    \end{macrocode}
+% \end{macro}
 %
 % \subsection{OST Colors}
 %
-% ^^A Create bibliography and add this link:
-% ^^A https://github.com/HBadertscher/OSTReport/blob/master/header/OSTColors.sty
 % Define the colors according to the OST corporate design. The code was kindly
 % stolen from H. Badertscher's \texttt{OSTColors.sty}
 % \cite{hbadertscher-ostcolors}. First there are the ``primary colors''.
@@ -171,6 +269,57 @@
 \definecolor{OSTBlue}{RGB}{0,115,176}
 \definecolor{OSTOrange}{RGB}{251,186,0}
 %    \end{macrocode}
+%
+% \subsection{Sane Defaults}
+%
+% First, set up |hyperref| to not look hideous.
+%    \begin{macrocode}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=OSTBlack,
+    citecolor=OSTBlackberry,
+    filecolor=OSTBlack,
+    urlcolor=OSTBlue,
+}
+%    \end{macrocode}
+% Then create a listings style.
+%    \begin{macrocode}
+\lstdefinestyle{ost-base}{
+    belowcaptionskip=\baselineskip,
+    breaklines=true,
+    frame=none,
+    inputencoding=utf8,
+    % margin
+    xleftmargin=\parindent,
+    % numbers
+    numbers=left,
+    numbersep=5pt,
+    numberstyle=\ttfamily\footnotesize\color{OSTGray},
+    % background
+    backgroundcolor=\color{white},
+    showstringspaces=false,
+    % default language
+    language=TeX,
+    % break long lines, and show an arrow where the line was broken
+    breaklines=true,
+    postbreak=\mbox{\textcolor{OSTDarkBlue}{$\hookrightarrow$}\space},
+    % font
+    basicstyle=\ttfamily\small,
+    identifierstyle=\color{OSTBlack},
+    keywordstyle=\color{OSTBlue},
+    commentstyle=\color{OSTGray},
+    stringstyle=\color{OSTBlackberry},
+}
+%    \end{macrocode}
+% Then we set this style to be default.
+%    \begin{macrocode}
+\lstset{style=ost-base, escapechar=`}
+%    \end{macrocode}
+%
+% ^^A\begin{thebibliography}{1}
+% ^^A\bibitem[hbadertscher-ostcolors] OST Colorscheme.
+% ^^A\url{https://github.com/HBadertscher/OSTReport/blob/master/header/OSTColors.sty}
+% ^^A\end{thebibliography}
 % \Finale
 \endinput
-% vim:ts=4 sw=4 et:
+% vim:ts=4 sw=4 et spell spelllang=en ft=tex:
