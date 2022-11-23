@@ -30,6 +30,7 @@
 
 \usepackage{oststud}
 \usepackage{enumitem}
+\usepackage{tikz}
 \usepackage[
     type={CC},
     modifier={by-sa},
@@ -91,21 +92,114 @@
 %
 % \section{Usage}
 %
-% First, it is to not that this packages sets some sane defaults to the
-% |hyperref| and |listings| packages.
+% \subsection{Vectors and Vector Calculus}
 %
-% \DescribeMacro{\dummyMacro}
-% This macro does nothing.\index{doing nothing|usage} It is merely an
-% example.  If this were a real macro, you would put a paragraph here
-% describing what the macro is supposed to do, what its mandatory and
-% optional arguments are, and so forth.
+% \DescribeMacro{\vec} 
+% \DescribeMacro{\uvec}
+% In the physics used by electrical engineers it is common to use bold letters
+% for vectors. If the |dontrenew| option is set a new macro |\bvec| (bold
+% |\vec|) defines the bold vector notation. Otherwise the default vector
+% notation with the tiny ugly arrow ($\oldvec{u}$) is replaced by bold and the
+% arrow notation saved in |\oldvec|. In vector calculus it is common to denote
+% unit vectors by putting a hat, so there is a macro |\uvec| that does just
+% that:
+% \[
+%   \uvec{u} = \vec{u}/u.
+% \]
 %
-% \DescribeEnv{dummyEnv}
-% This environment does nothing.  It is merely an example.
-% If this were a real environment, you would put a paragraph here
-% describing what the environment is supposed to do, what its
-% mandatory and optional arguments are, and so forth.
+% \DescribeMacro{\dotp}
+% \DescribeMacro{\crossp}
+% To differentiate the dot and cross products (between vectors) from normal
+% product between scalars ($a \cdot b$ and $a \times b$), the macros |\dotp|
+% and |\crossp| provide a bold variant:
+% \[
+%   \vec{u} \dotp \vec{v}, \qquad
+%   \vec{u} \crossp \vec{v}.
+% \]
 %
+% \DescribeMacro{\grad}
+% \DescribeMacro{\div}
+% \DescribeMacro{\curl}
+% The macros |\grad|, |\div| and |\curl| provide symbols for the gradient,
+% divergence and curl operators used in vector calculus. If the option
+% |textvecdiff| is set, they symbols are written as words, otherwise they will
+% he written (ab)using the Nabla symbol, i.e. by pretending that the symbol
+% $\vec{\nabla}$ is a ``vector'' (sometime referred to as ``del'') of partial
+% derivates: $\vec{\nabla} = (\partial_x, \partial_y, \partial_z)^\mathsf{T}$.
+% Unless the option |dontrenew| is set, the division symbol is replaced by the
+% divergence and the symbol $\divsymb$ is saved in |\divsymb|. For a scalar
+% field $\phi$ or a vector field $\vec{F}$ the notation (in order) of the
+% gradient, divergence and curl appear as follows:
+% \[
+%   \grad \phi, \quad
+%   \div \vec{F}, \quad
+%   \curl \vec{F}.
+% \]
+%
+% \DescribeMacro{\laplacian}
+% \DescribeMacro{\vlaplacian}
+% Continuing with the (ab)use of the ``Nabla'' or ``Del'' notation, the
+% there is a macro |\laplacian| for the Laplacian operator
+% \[
+%   \laplacian \equiv \div \grad \equiv \sum_i \partial^2_i.
+% \]
+% Notice that the Nabla symbol is not bold, that is because the Laplacian
+% operator results in a scalar value. Though, sometimes in electrodynamics the
+% vector Laplacian is used (which applies the Laplacian operator to each
+% component). To differentiate the two there is a macro |\vlaplacian| which 
+% uses the bold nabla symbol: $\vlaplacian$. If the option |dontrenew| is set
+% both symbols are replaced by div grad.
+%
+% \subsection{References}
+%
+% ^^A TODO: write section
+% \textit{Work in progress.}
+%
+% ^^A \DescribeMacro{\skriptum}
+% ^^A \DescribeMacro{\sref}
+%
+% ^^A \DescribeMacro{\textbook}
+% ^^A \DescribeMacro{\bref}
+%
+% \subsection{OST Colors}
+% 
+% The official OST color palette provides the following ``primary'' or
+% ``accent'' colors.
+% \begin{center}
+%   \begin{tikzpicture}
+%      \begin{scope}
+%           \foreach [count=\i] \c in {Black,Gray,Blackberry,Raspberry} {
+%               \node[
+%                   thick, draw=white, fill={OST\c},
+%                   minimum width=3cm, minimum height=1cm,
+%               ] (\c) at ({3.2cm*\i},0) {\texttt{OST\c}};
+%           }
+%           \node[text=white] at (Black) {\texttt{OSTBlack}};
+%      \end{scope}
+%   \end{tikzpicture}
+% \end{center}
+% And then there are the other ``design colors''.
+% \begin{center}
+%   \begin{tikzpicture}
+%      \begin{scope}[yshift=-2cm]
+%           \foreach [count=\i] \c in {Orange,Red,Purple,Blue,Green} {
+%               \foreach [count=\j] \s in {Dark,{},Light}{
+%                   \node[
+%                       thick, draw=white, fill={OST\s\c},
+%                       minimum width=3cm, minimum height=1cm,
+%                   ] (\c\s) at ({3.2cm*\j},{-1.2cm*\i}) {\texttt{OST\s\c}};
+%               }
+%           }
+%       \end{scope}
+%   \end{tikzpicture}
+% \end{center}
+%
+% \subsection{Sane Defaults}
+%
+% ^^A TODO: write section
+% \textit{Work in progress.}
+%
+% ^^A This macros separates the documentation from the implementation
 % \StopEventually{}
 %
 % \section{Implementation}
@@ -138,16 +232,13 @@
 % \subsection{Vectors and Vector Calculus}
 %
 % \begin{macro}{\vec}
-% In the physics used by electrical engineers it is common to use bold letters
-% for vectors. If the |dontrenew| option is set a new macro |\bvec| (bold
-% |\vec|) defines the bold vector notation. Otherwise the default vector
-% notation with the tiny ugly arrow is saved in |\oldvec|.
+% Set up bold notation for vectors.
 %    \begin{macrocode}
 \newcommand{\ost@vec}[1]{\mathbf{\bm{#1}}}
 \ifost@dontrenew
     \newcommand{\bvec}[1]{\ost@vec{#1}}
 \else
-    \newcommand{\oldvec}[1]{\vec{#1}}
+    \let\oldvec\vec
     \renewcommand{\vec}[1]{\ost@vec{#1}}
 \fi
 %    \end{macrocode}
@@ -187,6 +278,12 @@
     \DeclareMathOperator{\ost@div}{div}
 \else
     \DeclareMathOperator{\ost@div}{\vec{\nabla}\dotp}
+\fi
+\ifost@dontrenew
+    \DeclareMathOperator{\divg}{\ost@div}
+\else
+    \let\divsymb\div
+    \renewcommand{\div}{\ost@div}
 \fi
 %    \end{macrocode}
 % \end{macro}
@@ -244,30 +341,35 @@
 % \cite{hbadertscher-ostcolors}. First there are the ``primary colors''.
 %    \begin{macrocode}
 \definecolor{OSTBlack}{RGB}{25,25,25}
+\definecolor{OSTGray}{RGB}{198,198,198}
 \definecolor{OSTBlackberry}{RGB}{140,25,95}
 \definecolor{OSTRaspberry}{RGB}{215,40,100}
 %    \end{macrocode}
 % Then the ``design colors''.
 %    \begin{macrocode}
-\definecolor{OSTGray}{RGB}{198,198,198}
+\definecolor{OSTPurple}{RGB}{149,96,164}
 \definecolor{OSTDarkPurple}{RGB}{107,56,129}
 \definecolor{OSTLightPurple}{RGB}{208,169,208}
+%    \end{macrocode}
+%    \begin{macrocode}
+\definecolor{OSTGreen}{RGB}{29,175,142}
 \definecolor{OSTDarkGreen}{RGB}{0,126,107}
 \definecolor{OSTLightGreen}{RGB}{167,213,194}
+%    \end{macrocode}
+%    \begin{macrocode}
+\definecolor{OSTRed}{RGB}{232,78,15}
 \definecolor{OSTDarkRed}{RGB}{195,46,21}
 \definecolor{OSTLightRed}{RGB}{243,154,139}
+%    \end{macrocode}
+%    \begin{macrocode}
+\definecolor{OSTBlue}{RGB}{0,115,176}
 \definecolor{OSTDarkBlue}{RGB}{0,115,176}
 \definecolor{OSTLightBlue}{RGB}{95,191,237}
+%    \end{macrocode}
+%    \begin{macrocode}
+\definecolor{OSTOrange}{RGB}{251,186,0}
 \definecolor{OSTDarkOrange}{RGB}{209,143,0}
 \definecolor{OSTLightOrange}{RGB}{253,214,175}
-%    \end{macrocode}
-% And finally the base colors.
-%    \begin{macrocode}
-\definecolor{OSTPurple}{RGB}{149,96,164}
-\definecolor{OSTGreen}{RGB}{29,175,142}
-\definecolor{OSTRed}{RGB}{232,78,15}
-\definecolor{OSTBlue}{RGB}{0,115,176}
-\definecolor{OSTOrange}{RGB}{251,186,0}
 %    \end{macrocode}
 %
 % \subsection{Sane Defaults}
