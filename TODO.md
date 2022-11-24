@@ -3,18 +3,20 @@
 ## `oststud` Package
 
 - [ ] Options
-  - [ ] Keyval options
-  - [ ] `donotrenew` don't rename predefined LaTeX commands and environments
+  - [X] `donotrenew` don't rename predefined LaTeX commands and environments
   - [ ] `colorsonly` load only the OST corporate design color (no macros)
   - [ ] `boldemph` change the behaviour of `\emph{}` to use bold instead of italic
+  - [ ] `bbprobability` use blackboard font for probability operators
 - [ ] Macros
-  - [ ] Vectors, Matrices
+  - [X] Vectors, Matrices
   - [ ] Equalities
+  - [ ] Probabilty operators \E{} \Pr{} \Var{} 
+  - [ ] Fourer, Laplace and Z-transform operators
   - [ ] Reference for books / external material 
-- [ ] Sane defaults
-  - [ ] `hyperref`
-  - [ ] `listings`
-- [ ] OST corporate design colors
+- [X] Sane defaults
+  - [X] `hyperref`
+  - [X] `listings`
+- [X] OST corporate design colors
 
 ## `oststud-classes` Document classes
 
