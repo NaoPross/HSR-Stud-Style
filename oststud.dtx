@@ -88,6 +88,10 @@
 %        derivatives. Instead the symbols \(\vec{\nabla}, \vec{\nabla}\dotp,
 %         \vec{\nabla}\crossp, \nabla^2, \vec{\nabla}^2\) are be replaced with
 %         grad, div, curl and div grad.
+%    \item[|textvecdiff|] \textit{Work in progress.}
+%    \item[|bfemph|] \textit{Work in progress.}
+%    \item[|bbprobability|] \textit{Work in progress.}
+%    \item[|scrtransforms|] \textit{Work in progress.}
 % \end{description}
 %
 % \section{Usage}
@@ -98,11 +102,11 @@
 % \DescribeMacro{\uvec}
 % In the physics used by electrical engineers it is common to use bold letters
 % for vectors. If the |dontrenew| option is set a new macro |\bvec| (bold
-% |\vec|) defines the bold vector notation. Otherwise the default vector
-% notation with the tiny ugly arrow ($\oldvec{u}$) is replaced by bold and the
-% arrow notation saved in |\oldvec|. In vector calculus it is common to denote
-% unit vectors by putting a hat, so there is a macro |\uvec| that does just
-% that:
+% |\vec|) that takes a \marg{symbol} defines the bold vector notation.
+% Otherwise the default vector notation with the tiny ugly arrow ($\oldvec{u}$)
+% is replaced by bold and the arrow notation saved in |\oldvec|. In vector
+% calculus it is common to denote unit vectors by putting a hat, so there is a
+% macro |\uvec| that does just that:
 % \[
 %   \uvec{u} = \vec{u}/u.
 % \]
@@ -149,6 +153,24 @@
 % component). To differentiate the two there is a macro |\vlaplacian| which 
 % uses the bold nabla symbol: $\vlaplacian$. If the option |dontrenew| is set
 % both symbols are replaced by div grad.
+%
+% \subsection{Complex Numbers}
+%
+% ^^A TODO: write section
+% \textit{Work in progress.}
+%
+% \subsection{Probability Operators}
+%
+% ^^A TODO: write section
+% \textit{Work in progress.}
+%
+% \subsection{Transformation Operators}
+%
+% ^^A TODO: write section
+% \textit{Work in progress.}
+% \[
+%   \laplace\{f(t)\} = F(s) \corresponds f(t) \rcorresponds F(s)
+% \]
 %
 % \subsection{References}
 %
@@ -226,8 +248,29 @@
 }
 \DeclareBoolOption[false]{dontrenew}
 \DeclareBoolOption[false]{textvecdiff}
+\DeclareBoolOption[false]{bfemph}
+\DeclareBoolOption[false]{bbprobability}
+% \DeclareBoolOption[false]{scrtransforms}
 \ProcessLocalKeyvalOptions*
 %    \end{macrocode}
+%
+% \subsection{Bold emphasis}
+%
+% \begin{macro}{\emph}
+% Change the behaviour of |\emph|.
+%    \begin{macrocode}
+\ifost@bfemph
+    \ifost@dontrenew
+        \PackageError{The options \noexpand\dontrenew and \noexpand\bfemph cannot be used at the same time!}
+    \fi
+    \long\expandafter\def\csname em \endcsname{%
+        \@nomath\em
+        \if b\expandafter\@car\f@series\@nil
+            \itshape\else\bfseries\fi
+    }
+\fi
+%    \end{macrocode}
+% \end{macro}
 %
 % \subsection{Vectors and Vector Calculus}
 %
@@ -312,6 +355,114 @@
 %    \end{macrocode}
 % \end{macro}
 %
+% \subsection{Complex Numbers}
+%
+% \begin{macro}{\Re,\Im}
+% Replace the real and imaginary operators to look ``normal'', that is not
+% using the Fraktur fonts.
+%    \begin{macrocode}
+\ifost@dontrenew\else
+    \renewcommand{\Re}[1]{\mathrm{Re} \left\{#1\right\}}
+    \renewcommand{\Im}[1]{\mathrm{Im} \left\{#1\right\}}
+\fi
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{Probability Operators}
+%
+% \begin{macro}{\E}
+% Expectation of a random variable.
+%    \begin{macrocode}
+\ifost@bbprobability
+    \DeclareMathOperator{\ost@expectation}{\mathbb{E}}
+\else
+    \DeclareMathOperator{\ost@expectation}{E}
+\fi
+\newcommand{\E}[1]{\ost@expectation\left\{#1\right\}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\Var}
+% Variance of a random variable.
+%    \begin{macrocode}
+\ifost@bbprobability
+    \DeclareMathOperator{\ost@variance}{\mathbb{V}}
+\else
+    \DeclareMathOperator{\ost@variance}{Var}
+\fi
+\newcommand{\Var}[1]{\ost@variance\left\{#1\right\}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\Pr}
+% Probability operator.
+%    \begin{macrocode}
+\ifost@bbprobability
+    \DeclareMathOperator{\ost@probability}{\mathbb{P}}
+\else
+    \DeclareMathOperator{\ost@probability}{Pr}
+\fi
+\ifost@dontrenew
+    \newcommand{\P}[1]{\ost@probability\left\{#1\right\}}
+\else
+    \renewcommand{\Pr}[1]{\ost@probability\left\{#1\right\}}
+\fi
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{Transformation Operators}
+%
+% \begin{macro}{\fourier,\ifourier}
+% Fourier transform and its inverse.
+%    \begin{macrocode}
+\DeclareMathOperator{\fourier}{\mathcal{F}}
+\DeclareMathOperator{\ifourier}{\mathcal{F}^{-1}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\laplace,\ilaplace}
+% Laplace transform and its inverse.
+%    \begin{macrocode}
+\DeclareMathOperator{\laplace}{\mathcal{L}}
+\DeclareMathOperator{\ilaplace}{\mathcal{L}^{-1}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\ztransf,\iztransf}
+% Z-transform and its inverse.
+%    \begin{macrocode}
+\DeclareMathOperator{\ztransf}{\mathcal{Z}}
+\DeclareMathOperator{\iztransf}{\mathcal{Z}^{-1}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\hilbert}
+% Hilbert transform.
+%    \begin{macrocode}
+\DeclareMathOperator{\hilbert}{\mathcal{H}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\corresponds,\rcorresponds}
+% Correspondence symbols.
+%    \begin{macrocode}
+\newcommand{\corresponds}{%
+    \mbox{\setlength{\unitlength}{0.1em}%
+        \begin{picture}(20,10)%
+          \put(5,3){\circle{4}}%
+          \put(7,3){\line(1,0){7}}%
+          \put(16,3){\circle*{4}}%
+        \end{picture}}}
+\newcommand{\rcorresponds}{%
+    \mbox{\setlength{\unitlength}{0.1em}%
+        \begin{picture}(20,10)%
+          \put(5,3){\circle*{4}}%
+          \put(7,3){\line(1,0){7}}%
+          \put(16,3){\circle{4}}%
+        \end{picture}}}
+%    \end{macrocode}
+% \end{macro}
+%
 % \subsection{References}
 %
 % \begin{macro}{\skriptum,\sref}
@@ -381,7 +532,7 @@
     linkcolor=OSTBlack,
     citecolor=OSTBlackberry,
     filecolor=OSTBlack,
-    urlcolor=OSTBlue,
+    urlcolor=OSTDarkBlue,
 }
 %    \end{macrocode}
 % Then create a listings style.
