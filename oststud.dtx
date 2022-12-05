@@ -31,6 +31,7 @@
 \usepackage{oststud}
 \usepackage{enumitem}
 \usepackage{tikz}
+\usepackage{framed}
 \usepackage[
     type={CC},
     modifier={by-sa},
@@ -100,13 +101,14 @@
 %
 % \DescribeMacro{\vec} 
 % \DescribeMacro{\uvec}
-% In the physics used by electrical engineers it is common to use bold letters
-% for vectors. If the |dontrenew| option is set a new macro |\bvec| (bold
-% |\vec|) that takes a \marg{symbol} defines the bold vector notation.
-% Otherwise the default vector notation with the tiny ugly arrow ($\oldvec{u}$)
-% is replaced by bold and the arrow notation saved in |\oldvec|. In vector
-% calculus it is common to denote unit vectors by putting a hat, so there is a
-% macro |\uvec| that does just that:
+% In the physics used by electrical engineers it is common to use lowercase
+% bold letters for vectors (with the exception of electromagnetic fields
+% $\vec{E},\vec{B},\vec{A},\ldots$). If the |dontrenew| option is set a new
+% macro |\bvec| (bold |\vec|) that takes a \marg{symbol} defines the bold
+% vector notation. Otherwise the default vector notation with the tiny ugly
+% arrow ($\oldvec{u}$) is replaced by bold and the arrow notation saved in
+% |\oldvec|. In vector calculus it is common to denote unit vectors by putting
+% a hat, so there is a macro |\uvec| that does just that:
 % \[
 %   \uvec{u} = \vec{u}/u.
 % \]
@@ -154,10 +156,56 @@
 % uses the bold nabla symbol: $\vlaplacian$. If the option |dontrenew| is set
 % both symbols are replaced by div grad.
 %
+% \subsection{Linear Algebra}
+% 
+% \DescribeMacro{\mx}
+% Similarly to vectors it is common to write matrices as uppercase bold
+% letters, thus the |\mx| macro takes a \marg{symbol} and typesets it as
+% upright bold.
+%
+% \DescribeMacro{\mt}
+% \DescribeMacro{\mh}
+% The ``normal'' and Hermitian (complex conjugate) transpose of a matrix
+% $\mx{F}$ are denoted by a superscript sans-serif T or H respectively
+% ($\mt{\mx{F}}$ resp. $\mh{\mx{F}}$). The |\mt| and |\mh| macros (matrix
+% transpose and Hermitian transpose) provide this notation; They both take a
+% \marg{symbol}. In abstract vector spaces the Hermitian transpose becomes the
+% adjoint, for which it is common to use a superscript dagger (adjoint of
+% $\mathcal{Q}$ is $\mathcal{Q}^\dagger$), but since it does not come up very
+% often this package does \emph{not} provide a macro for the adjoint.
+%
+% \DescribeMacro{\minv}
+% Another common matrix operation that is annoying to write is the matrix
+% inverse, which is usually written as a superscript -1. The |\minv| command
+% takes a \marg{matrix} and adds the -1 superscript.
+%
+% Using all of the above we can typeset the matrix form of the linear least
+% squares approximation by writing
+% \begin{leftbar}
+% |\vec{a} = \minv{(\mt{\mx{Q}} \mx{Q})} \mt{\mx{Q}}\vec{y}|
+% \end{leftbar}
+% \noindent which results in the following:
+% \[
+%   \vec{a} = \minv{(\mt{\mx{Q}} \mx{Q})} \mt{\mx{Q}}\vec{y}
+%   \iff 
+%   \argmin_{(a_1,a_2)} \left(\sum_{i=0}^n y_i - a_1 x_i + a_2\right).
+% \]
+%
+% \DescribeMacro{\tr}
+% This package also provides a macro for the trace of a matrix.
+%
 % \subsection{Complex Numbers}
 %
 % ^^A TODO: write section
-% \textit{Work in progress.}
+% \DescribeMacro{\Re}
+% \DescribeMacro{\Im}
+% AMS maths's default notation for the real and imaginary parts of a complex
+% number use the Fraktur font capital letters $\mathfrak{R}$ and
+% $\mathfrak{I}$. However, in engineering it is more common to see the notation
+% $\Re{z}$ and $\Im{z}$, thus, unless the |dontrenew| option is set this
+% package replaces the notation with the former symbols. Both of the macros
+% were also modified to take an argument \marg{expression}, to surround the
+% expression with opening and closing curly brackets.
 %
 % \subsection{Probability Operators}
 %
@@ -196,6 +244,7 @@
 %                   minimum width=3cm, minimum height=1cm,
 %               ] (\c) at ({3.2cm*\i},0) {\texttt{OST\c}};
 %           }
+%           ^^A Because you can't see black on black
 %           \node[text=white] at (Black) {\texttt{OSTBlack}};
 %      \end{scope}
 %   \end{tikzpicture}
@@ -355,6 +404,45 @@
 %    \end{macrocode}
 % \end{macro}
 %
+% \subsection{Linear Algebra}
+%
+% \begin{macro}{\mx}
+% Notation for matrices as bold (uppercase) letters.
+%    \begin{macrocode}
+\newcommand{\mx}[1]{\mathbf{\bm{#1}}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\mt,\mh}
+% Normal and Hermitian (conjugate) transpose of a matrix.
+%    \begin{macrocode}
+\newcommand{\mt}[1]{{#1}^\mathsf{T}}
+\newcommand{\mh}[1]{{#1}^\mathsf{H}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\minv}
+% Matrix inverse.
+%    \begin{macrocode}
+\newcommand{\minv}[1]{{#1}^{-1}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\tr}
+% Trace of a matrix.
+%    \begin{macrocode}
+\DeclareMathOperator{\tr}{tr}
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{Mathematical Programming}
+% \begin{macro}{\argmin,\argmax}
+%    \begin{macrocode}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+%    \end{macrocode}
+% \end{macro}
+%
 % \subsection{Complex Numbers}
 %
 % \begin{macro}{\Re,\Im}
@@ -362,6 +450,7 @@
 % using the Fraktur fonts.
 %    \begin{macrocode}
 \ifost@dontrenew\else
+    \let\oldRe\Re \let\oldIm\Im
     \renewcommand{\Re}[1]{\mathrm{Re} \left\{#1\right\}}
     \renewcommand{\Im}[1]{\mathrm{Im} \left\{#1\right\}}
 \fi
