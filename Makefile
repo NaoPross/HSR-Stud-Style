@@ -16,7 +16,7 @@ oststud.tar.gz: Makefile README.md LICENSE.txt \
 	oststud.ins oststud.dtx build/oststud.pdf \
 	hsrstud.ins hsrstud.dtx build/hsrstud.pdf \
 	hsrstud-classes.dtx build/hsrstud-classes.pdf
-	tar cvzf $@ --transform 's,build/,,' $^
+	tar cvzf $@ --transform 's,build/,,' --transform 's,^,oststud/,' $^
 
 # Installer file
 ins: build/oststud.sty build/hsrzf.cls build/hsrbericht.cls build/hsrstud.sty
